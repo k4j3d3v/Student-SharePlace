@@ -19,19 +19,6 @@ class Resource(models.Model):
         return self.__class__.__name__
 
 
-class Note(Resource):
-    path = models.CharField(max_length=250)
-    price = models.FloatField()
-    course = models.ForeignKey(Course)
-
-
-class Experience(Resource):
-    kind_of = models.CharField(max_length=50)
-    text = models.TextField()
-    course = models.ManyToManyField(Course, related_name="related_to")
-    degree = models.ManyToManyField(Degree, related_name="related_to")
-
-
 class Degree(models.Model):
     name = models.CharField(max_length=150)
     BACHELOR = 'LT'
@@ -51,3 +38,18 @@ class Course(models.Model):
     credits = models.IntegerField()
     lecturer = models.CharField(max_length=150)
     degree = models.ManyToManyField(Degree)
+
+
+class Note(Resource):
+    path = models.CharField(max_length=250)
+    price = models.FloatField()
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+
+
+class Experience(Resource):
+    kind_of = models.CharField(max_length=50)
+    text = models.TextField()
+    course = models.ManyToManyField(Course, related_name="related_to")
+    degree = models.ManyToManyField(Degree, related_name="related_to")
+
+
