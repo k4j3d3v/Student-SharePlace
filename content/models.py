@@ -32,6 +32,8 @@ class Degree(models.Model):
         choices=DEGREE_TYPE_CHOICES,
     )
 
+    def __str__(self):
+        return self.type_of + '-' + self.name
 
 class Course(models.Model):
     name = models.CharField(max_length=150)
@@ -39,6 +41,8 @@ class Course(models.Model):
     lecturer = models.CharField(max_length=150)
     degree = models.ManyToManyField(Degree)
 
+    def __str__(self):
+        return self.name
 
 class Note(Resource):
     path = models.CharField(max_length=250)
