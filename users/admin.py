@@ -1,8 +1,7 @@
+from content.models import Note, Experience
 from django.contrib import admin
-
 # Register your models here.
 from django.contrib.auth.admin import UserAdmin
-
 from users.forms import CustomUserCreationForm, CustomUserChangeForm
 from users.models import CustomUser
 
@@ -30,3 +29,5 @@ class CustomUserAdmin(UserAdmin):
 
 
 admin.site.register(CustomUser, CustomUserAdmin)
+admin.site.register(Note)
+admin.site.register(Experience)
