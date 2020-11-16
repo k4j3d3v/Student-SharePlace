@@ -24,6 +24,7 @@ class Resource(models.Model):
     def get_filename(self):
         return os.path.basename(self.uploaded.name)
 
+
 class Degree(models.Model):
     name = models.CharField(max_length=150)
     BACHELOR = 'LT'
