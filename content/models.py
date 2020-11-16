@@ -1,3 +1,5 @@
+import os
+
 from django.db import models
 from django.utils import timezone
 from users.models import CustomUser
@@ -7,6 +9,7 @@ class Resource(models.Model):
     title = models.CharField(max_length=150)
     publ_date = models.DateTimeField(default=timezone.now)
     owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    uploaded = models.FileField(upload_to='resources/', null=True)
 
     def __str__(self):
         return self.title
@@ -18,6 +21,8 @@ class Resource(models.Model):
     def get_cname(self):
         return self.__class__.__name__
 
+    def get_filename(self):
+        return os.path.basename(self.uploaded.name)
 
 class Degree(models.Model):
     name = models.CharField(max_length=150)
@@ -35,6 +40,7 @@ class Degree(models.Model):
     def __str__(self):
         return self.type_of + '-' + self.name
 
+
 class Course(models.Model):
     name = models.CharField(max_length=150)
     credits = models.IntegerField()
@@ -43,6 +49,7 @@ class Course(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class Note(Resource):
     path = models.CharField(max_length=250)
@@ -55,5 +62,3 @@ class Experience(Resource):
     text = models.TextField()
     course = models.ManyToManyField(Course, related_name="related_to")
     degree = models.ManyToManyField(Degree, related_name="related_to")
-
-

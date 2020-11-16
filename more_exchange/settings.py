@@ -12,9 +12,9 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -27,12 +27,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
     'users',
     'content',
+    'crispy_forms',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -71,7 +71,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'more_exchange.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
@@ -81,7 +80,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -129,3 +127,5 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = "postmaster@sandbox82ab12d067a8480b9aed1675a84ce4c8.mailgun.org"
 EMAIL_HOST_PASSWORD = "bf81c7af2ffe1666542a2ac662bf9b2c-4d640632-86d16e6e"
 EMAIL_USE_TLS = True
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

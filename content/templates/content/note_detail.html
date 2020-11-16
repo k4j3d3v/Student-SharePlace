@@ -5,4 +5,5 @@
 <p><strong>Publication Date:</strong> {{ note.publ_date }}</p>
 <p><strong>Price:</strong> {{ note.price }}</p>
 <p><strong>Course:</strong> {{ note.course }}</p>
+<p><strong>File:</strong><a href="{{ note.uploaded.url }}">{{ note.get_filename }}</a></p>
 {% endblock %}
