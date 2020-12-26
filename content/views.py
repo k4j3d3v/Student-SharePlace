@@ -1,9 +1,10 @@
 from content.forms import AddNoteModelForm, AddExperienceModelForm
-from content.models import Note, Experience
+from content.models import Note, Experience, Course
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from django.views.generic import DetailView, CreateView
+from django.views.generic import DetailView, CreateView, ListView
 from django.views.generic.edit import UpdateView, DeleteView
+from users.models import CustomUser
 
 
 class ExperienceUpdate(UpdateView):
@@ -73,3 +74,27 @@ class NoteCreate(LoginRequiredMixin, CreateView):
     #     form = AddNoteModelForm()
     #
     # return render(request, 'content/note_add.html', {'form': form})
+
+
+class CoursesListView(LoginRequiredMixin, ListView):
+    model = Course
+    context_object_name = 'courses_list'
+    template_name = 'users/course_list.html'
+
+    def get_queryset(self):
+        # TODO: fix missing degree field in admin user
+        print("email: %s \n" % self.request.user.email)
+        user = CustomUser.objects.get(email=self.request.user.email)
+        print("User: %s" % (dir(user)))
+        return Course.objects.filter(degree=user.degree)
+
+    # TODO: https://docs.djangoproject.com/en/3.1/topics/db/examples/
+    # start from here
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        user = CustomUser.objects.get(email=self.request.user.email)
+        courses = Course.objects.filter(degree=user.degree)
+        # Add in a QuerySet of all the books
+        # context['res_count'] =
+        return context

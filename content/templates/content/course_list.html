@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Your Degree Courses</h2>
+
+
+<ul>
+    {% for res in courses_list %}
+    <li>{{ res }} <span class="badge badge-primary badge-pill">{{ res.note_set.count }}</span>
+        <ul>
+            {% if res.note_set.count > 0 %}
+            <li>{{ res.note_set.all|join:", " }}</li>
+            {% else %}
+            <li> No related notes.</li>
+            {% endif %}
+        </ul>
+    </li>
+
+    {% endfor %}
+</ul>
+
+{% endblock %}

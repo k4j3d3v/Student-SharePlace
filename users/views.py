@@ -3,8 +3,9 @@ from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from django.views.generic import ListView
-from users.forms import CustomUserCreationForm
+from django.views.generic import ListView, UpdateView
+from users.forms import CustomUserCreationForm, CustomUserChangeForm
+from users.models import CustomUser
 
 
 # Create your views here.
@@ -20,11 +21,17 @@ def register(request):
             user = form.save()
             user.username = form.cleaned_data['email'] if not user.username else user.username
             login(request, user)
-            return redirect(reverse("users:dashboard"))
+            return redirect(reverse("dashboard"))
     else:
         form = CustomUserCreationForm()
 
     return render(request, "users/register.html", {"form": form})
+
+
+class ProfileUpdate(LoginRequiredMixin, UpdateView):
+    model = CustomUser
+    form_class = CustomUserChangeForm
+    template_name = 'users/user_update_form.html'
 
 
 class NotesListView(LoginRequiredMixin, ListView):
