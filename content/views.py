@@ -79,7 +79,7 @@ class NoteCreate(LoginRequiredMixin, CreateView):
 class CoursesListView(LoginRequiredMixin, ListView):
     model = Course
     context_object_name = 'courses_list'
-    template_name = 'users/course_list.html'
+    template_name = 'content/course_list.html'
 
     def get_queryset(self):
         # TODO: fix missing degree field in admin user
@@ -88,13 +88,13 @@ class CoursesListView(LoginRequiredMixin, ListView):
         print("User: %s" % (dir(user)))
         return Course.objects.filter(degree=user.degree)
 
-    # TODO: https://docs.djangoproject.com/en/3.1/topics/db/examples/
+    # TODO: https://docs.djangonoteproject.com/en/3.1/topics/db/examples/
     # start from here
-    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
-        context = super().get_context_data(**kwargs)
-        user = CustomUser.objects.get(email=self.request.user.email)
-        courses = Course.objects.filter(degree=user.degree)
-        # Add in a QuerySet of all the books
-        # context['res_count'] =
-        return context
+    # def get_context_data(self, **kwargs):
+    # #     # Call the base implementation first to get a context
+    #     context = super().get_context_data(**kwargs)
+    #     user = CustomUser.objects.get(email=self.request.user.email)
+    # #     courses = Course.objects.filter(degree=user.degree)
+    # #     # Add in a QuerySet of all the books
+    #     # context['res_count'] =
+    #     return context

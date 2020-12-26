@@ -9,7 +9,13 @@
     <li>{{ res }} <span class="badge badge-primary badge-pill">{{ res.note_set.count }}</span>
         <ul>
             {% if res.note_set.count > 0 %}
-            <li>{{ res.note_set.all|join:", " }}</li>
+            {% with notes=res.note_set.all %}
+            {% for note in notes %}
+            <li><a href="{% url 'content:note-detail' pk=note.pk %}"> {{ note }} </a></li>
+
+            {% endfor %}
+            {% endwith %}
+
             {% else %}
             <li> No related notes.</li>
             {% endif %}
