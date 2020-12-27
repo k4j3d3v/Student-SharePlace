@@ -33,6 +33,9 @@ class ProfileUpdate(LoginRequiredMixin, UpdateView):
     form_class = CustomUserChangeForm
     template_name = 'users/user_update_form.html'
 
+    def get_object(self):
+        return self.request.user
+
 
 class NotesListView(LoginRequiredMixin, ListView):
     model = Note

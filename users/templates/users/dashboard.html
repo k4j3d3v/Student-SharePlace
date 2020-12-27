@@ -15,7 +15,7 @@ Hello,
     <a href="{% url 'notes' %}">Your Notes</a>
     <a href="{% url 'experiences' %}">Your Experiences</a>
     <a href="{% url 'content:course-list' %}">Your Courses</a>
-    <a href="{% url 'update' pk=user.pk %}">Update your profile!</a>
+    <a href="{% url 'edit_profile' %}">Edit your profile!</a>
     {% else %}
     <a href="{% url 'login' %}">Login</a>
     <a href="{% url 'register' %}">Join Us!</a>

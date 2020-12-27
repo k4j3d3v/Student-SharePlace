@@ -12,6 +12,6 @@ urlpatterns = [
     path('register/', register, name='register'),
     path('notes', NotesListView.as_view(), name='notes'),
     path('experiences', ExperiencesListView.as_view(), name='experiences'),
-    path('update/<int:pk>', ProfileUpdate.as_view(), name='update'),
+    path('edit_profile', ProfileUpdate.as_view(), name='edit_profile'),
 
 ]
