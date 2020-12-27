@@ -7,6 +7,11 @@ class AddNoteModelForm(ModelForm):
         model = Note
         exclude = ['path', 'owner', 'publ_date']
 
+    def __init__(self, user=None, **kwargs):
+        super(AddNoteModelForm, self).__init__(**kwargs)
+        if user:
+            self.fields['course'].queryset = user.degree.course_set.all()
+
 
 class AddExperienceModelForm(ModelForm):
     class Meta:

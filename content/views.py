@@ -59,6 +59,10 @@ class NoteCreate(LoginRequiredMixin, CreateView):
         form.instance.owner = self.request.user
         return super().form_valid(form)
 
+    def get_form_kwargs(self):
+        kwargs = super(NoteCreate, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
     # if request.method == 'POST':
     #     # create a form instance and populate it with data from the request:
     #     form = AddNoteModelForm(request.POST)
@@ -88,7 +92,7 @@ class CoursesListView(LoginRequiredMixin, ListView):
         print("User: %s" % (dir(user)))
         return Course.objects.filter(degree=user.degree)
 
-    # TODO: https://docs.djangonoteproject.com/en/3.1/topics/db/examples/
+    # TODO: https://docs.djangoproject.com/en/3.1/topics/db/examples/
     # start from here
     # def get_context_data(self, **kwargs):
     # #     # Call the base implementation first to get a context
