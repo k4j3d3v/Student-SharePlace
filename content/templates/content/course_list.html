@@ -3,21 +3,35 @@
 {% block content %}
 <h2>Your Degree Courses</h2>
 
-
 <ul>
-    {% for res in courses_list %}
-    <li>{{ res }} <span class="badge badge-primary badge-pill">{{ res.note_set.count }}</span>
+    {% for course in courses_list %}
+    <li>{{ course }}
+        <h4><span class="badge badge-primary badge-pill">{{ course.note_set.count }}</span> Notes about your courses:
+        </h4>
         <ul>
-            {% if res.note_set.count > 0 %}
-            {% with notes=res.note_set.all %}
+            {% if course.note_set.count > 0 %}
+            {% with notes=course.note_set.all %}
             {% for note in notes %}
             <li><a href="{% url 'content:note-detail' pk=note.pk %}"> {{ note }} </a></li>
 
             {% endfor %}
             {% endwith %}
-
             {% else %}
             <li> No related notes.</li>
+            {% endif %}
+        </ul>
+        <h4><span class="badge badge-primary badge-pill">{{ course.experience_set.count }}</span> Experience about your
+            courses:</h4>
+        <ul>
+            {% if course.experience_set.count > 0 %}
+            {% with exps=course.experience_set.all %}
+            {% for ex in exps %}
+            <li><a href="{% url 'content:experience-detail' pk=ex.pk %}"> {{ ex }} </a></li>
+
+            {% endfor %}
+            {% endwith %}
+            {% else %}
+            <li> No related experiences.</li>
             {% endif %}
         </ul>
     </li>
