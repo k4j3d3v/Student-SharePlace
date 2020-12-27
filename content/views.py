@@ -29,16 +29,14 @@ class ExperienceCreate(LoginRequiredMixin, CreateView):
     template_name = 'content/note_add.html'
     success_url = reverse_lazy('experiences')
 
+    def get_form_kwargs(self):
+        kwargs = super(ExperienceCreate, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
     def form_valid(self, form):
         form.instance.owner = self.request.user
         return super().form_valid(form)
-
-
-class NoteUpdate(UpdateView):
-    model = Note
-    form_class = AddNoteModelForm
-    template_name_suffix = '_update_form'
-    # success_url = '/books/'
 
 
 class NoteDelete(DeleteView):
@@ -48,6 +46,31 @@ class NoteDelete(DeleteView):
 
 class NoteDetail(DetailView):
     model = Note
+
+
+# How to make a common superclass for NoteUpdate and NoteCreate views
+# to accomplish DRY principle
+# class NoteManipulate(View):
+#     form_class = AddNoteModelForm
+#     model = Note
+#
+#     def get_form_kwargs(self):
+#         kwargs = super(NoteCreate, self).get_form_kwargs()
+#         kwargs['user'] = self.request.user
+#         return kwargs
+
+
+class NoteUpdate(UpdateView):
+    model = Note
+    form_class = AddNoteModelForm
+    template_name_suffix = '_update_form'
+
+    # success_url = '/books/'
+
+    def get_form_kwargs(self):
+        kwargs = super(NoteUpdate, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
 
 class NoteCreate(LoginRequiredMixin, CreateView):
@@ -63,6 +86,7 @@ class NoteCreate(LoginRequiredMixin, CreateView):
         kwargs = super(NoteCreate, self).get_form_kwargs()
         kwargs['user'] = self.request.user
         return kwargs
+
     # if request.method == 'POST':
     #     # create a form instance and populate it with data from the request:
     #     form = AddNoteModelForm(request.POST)

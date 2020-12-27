@@ -14,6 +14,14 @@ class AddNoteModelForm(ModelForm):
 
 
 class AddExperienceModelForm(ModelForm):
+
+    def __init__(self, user=None, **kwargs):
+        super(type(self), self).__init__(**kwargs)
+        # TODO: manage degree or course choice for experience
+        # self.fields['degree'].widget = forms.TextInput()
+        if user:
+            self.fields['course'].queryset = user.degree.course_set.all()
+
     class Meta:
         model = Experience
         exclude = ['owner', 'publ_date']
