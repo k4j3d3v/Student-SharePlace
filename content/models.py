@@ -62,4 +62,4 @@ class Experience(Resource):
     kind_of = models.CharField(max_length=50)
     text = models.TextField()
     course = models.ManyToManyField(Course)  # , related_name="related_to")
-    degree = models.ManyToManyField(Degree, related_name="related_to")
+    degree = models.ManyToManyField(Degree, related_name="related_to", null=True, blank=True)

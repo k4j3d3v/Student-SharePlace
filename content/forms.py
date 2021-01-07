@@ -1,4 +1,5 @@
-from content.models import Note, Experience
+from content.models import Note, Experience, Course
+from django import forms
 from django.forms import ModelForm
 
 
@@ -20,7 +21,11 @@ class AddExperienceModelForm(ModelForm):
         # TODO: manage degree or course choice for experience
         # self.fields['degree'].widget = forms.TextInput()
         if user:
-            self.fields['course'].queryset = user.degree.course_set.all()
+            print("user degree")
+            print(user)
+            self.fields['course'].queryset = Course.objects.filter(degree=user.degree)
+            self.fields['degree'].queryset = user.degree
+            self.fields['degree'].widget = forms.CheckboxSelectMultiple()
 
     class Meta:
         model = Experience

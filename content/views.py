@@ -36,6 +36,9 @@ class ExperienceCreate(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.owner = self.request.user
+        # print(form.instance.degree)
+        # for d in self.request.user.degree:
+        #     form.instance.degree.add(d)
         return super().form_valid(form)
 
 

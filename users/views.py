@@ -1,9 +1,9 @@
 from content.models import Note, Experience
-from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render, redirect
-from django.urls import reverse
-from django.views.generic import ListView, UpdateView
+from django.contrib.messages.views import SuccessMessageMixin
+from django.shortcuts import render
+from django.urls import reverse_lazy
+from django.views.generic import ListView, UpdateView, CreateView
 from users.forms import CustomUserCreationForm, CustomUserChangeForm
 from users.models import CustomUser
 
@@ -14,18 +14,34 @@ def dashboard(request):
     return render(request, "users/dashboard.html")
 
 
-def register(request):
-    if request.method == "POST":
-        form = CustomUserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            user.username = form.cleaned_data['email'] if not user.username else user.username
-            login(request, user)
-            return redirect(reverse("dashboard"))
-    else:
-        form = CustomUserCreationForm()
+# def register(request):
+#     if request.method == "POST":
+#         form = CustomUserCreationForm(request.POST)
+#         if form.is_valid():
+#             print(form.cleaned_data['degree'])
+#             user = form.save()
+#             user.username = form.cleaned_data['email'] if not user.username else user.username
+#             login(request, user)
+#             return redirect(reverse("dashboard"))
+#     else:
+#         form = CustomUserCreationForm()
+#
+#     return render(request, "users/register.html", {"form": form})
 
-    return render(request, "users/register.html", {"form": form})
+class UserCreate(SuccessMessageMixin, CreateView):
+    form_class = CustomUserCreationForm
+    model = CustomUser
+    template_name = "users/register.html"
+    success_url = reverse_lazy('dashboard')
+
+    # def form_valid(self, form):
+    #     form.instance.owner = self.request.user
+    #     return super().form_valid(form)
+    #
+    # def get_form_kwargs(self):
+    #     kwargs = super(NoteCreate, self).get_form_kwargs()
+    #     kwargs['user'] = self.request.user
+    #     return kwargs
 
 
 class ProfileUpdate(LoginRequiredMixin, UpdateView):

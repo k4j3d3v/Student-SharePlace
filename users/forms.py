@@ -19,6 +19,28 @@ class CustomUserCreationForm(UserCreationForm):
         model = CustomUser
         fields = ("email", "username", "degree", "pic")
 
+    # Overriding save allows us to process the value of 'toppings' field
+    def save(self, commit=True):
+        # Get the unsaved Pizza instance
+        instance = super(CustomUserCreationForm, self).save(False)
+
+        # Prepare a 'save_m2m' method for the form,
+        old_save_m2m = self.save_m2m
+
+        def save_m2m():
+            old_save_m2m()
+            # This is where we actually link the pizza with toppings
+            instance.degree.clear()
+            for d in self.cleaned_data['degree']:
+                instance.degree.add(d)
+
+        self.save_m2m = save_m2m
+
+        instance.save()
+        self.save_m2m()
+
+        return instance
+
 
 class CustomUserChangeForm(UserChangeForm):
     class Meta(UserCreationForm.Meta):
