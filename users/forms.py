@@ -1,5 +1,6 @@
+from content.models import Degree
+from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-
 from users.models import CustomUser
 
 
@@ -13,11 +14,18 @@ from users.models import CustomUser
 #         html = Template("""<img src="$link"/>""")
 #         return mark_safe(html.substitute(link=value))
 
+# TODO : refactoring and understand why it works
+
 
 class CustomUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = CustomUser
         fields = ("email", "username", "degree", "pic")
+
+    degree = forms.ModelMultipleChoiceField(
+        queryset=Degree.objects.all(),
+        widget=forms.CheckboxSelectMultiple
+    )
 
     # Overriding save allows us to process the value of 'toppings' field
     def save(self, commit=True):
