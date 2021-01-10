@@ -107,17 +107,47 @@ class NoteCreate(LoginRequiredMixin, CreateView):
     # return render(request, 'content/note_add.html', {'form': form})
 
 
+def get_exact_match(model_class, m2m_field, ids):
+    query = model_class.objects.all()
+    for _id in ids:
+        query = query.filter(**{m2m_field: _id})
+    return query
+
+
 class CoursesListView(LoginRequiredMixin, ListView):
     model = Course
     context_object_name = 'courses_list'
     template_name = 'content/course_list.html'
 
+    # def get_queryset(self):
+    #     # TODO: fix missing degree field in admin user
+    #     print("email: %s \n" % self.request.user.email)
+    #     user = CustomUser.objects.get(email=self.request.user.email)
+    #     experiences = Experience.objects.none()#filter(owner=user).values_list('id', flat=True)
+    #     print(experiences)
+    #     lista_corsi = get_exact_match(Course, "courses", experiences)
+    #     print(lista_corsi)
+    #     return lista_corsi
+
     def get_queryset(self):
         # TODO: fix missing degree field in admin user
         print("email: %s \n" % self.request.user.email)
         user = CustomUser.objects.get(email=self.request.user.email)
-        print("User: %s" % (dir(user)))
-        return Course.objects.filter(degree=user.degree)
+        # print("User: %s" % (dir(user)))
+        # subs = User.objects.filter(subscribed_to__subscriber=request.user).values_list('id')
+        # profiles = UserCommunityProfile.objects.exclude(owner__in=subs)
+        degree_id = user.degree.all().values_list('id')
+        courses = Course.objects.filter(degree__in=degree_id)
+        # qs = Course.objects.all()
+        # for degree in user.degree.all():
+        #     qs.union(Course.objects.filter(degree=degree))
+        #     print(f"Union {qs}")
+        #
+        #     # print("Degree: %s"%degree)
+        #     # print(Course.objects.filter(degree=degree))
+        # print(f"Union {qs}")
+        # return Course.objects.filter(degree=user.degree)
+        return courses
 
     # TODO: https://docs.djangoproject.com/en/3.1/topics/db/examples/
     # start from here
