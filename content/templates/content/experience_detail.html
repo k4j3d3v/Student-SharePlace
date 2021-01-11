@@ -5,4 +5,8 @@
 <p><strong>Publication Date:</strong> {{ experience.publ_date }}</p>
 <p><strong>Kind of:</strong> {{ experience.kind_of }}</p>
 <p><strong>Text:</strong> {{ experience.text }}</p>
+{% if experience.uploaded %}
+<p><strong>File:</strong><a href="{{ experience.uploaded.url }}">{{ experience.get_filename }}</a></p>
+{% endif %}
+
 {% endblock %}

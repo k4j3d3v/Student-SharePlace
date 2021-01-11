@@ -11,7 +11,6 @@ class Resource(models.Model):
     title = models.CharField(max_length=150)
     publ_date = models.DateTimeField(default=timezone.now)
     owner = models.ForeignKey("users.CustomUser", on_delete=models.CASCADE)
-    uploaded = models.FileField(upload_to='resources/', null=True, blank=True)
 
     def __str__(self):
         return self.title
@@ -58,6 +57,7 @@ class Note(Resource):
     path = models.CharField(max_length=250)
     price = models.FloatField()
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    uploaded = models.FileField(upload_to='resources/')
 
 
 class Experience(Resource):
@@ -65,3 +65,4 @@ class Experience(Resource):
     text = models.TextField()
     course = models.ManyToManyField(Course)  # , related_name="related_to")
     degree = models.ForeignKey(Degree, on_delete=models.CASCADE, null=True, blank=True)
+    uploaded = models.FileField(upload_to='resources/', null=True, blank=True)
