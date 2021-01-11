@@ -2,14 +2,16 @@ import os
 
 from django.db import models
 from django.utils import timezone
-from users.models import CustomUser
+
+
+# from users.models import CustomUser
 
 
 class Resource(models.Model):
     title = models.CharField(max_length=150)
     publ_date = models.DateTimeField(default=timezone.now)
-    owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    uploaded = models.FileField(upload_to='resources/', null=True)
+    owner = models.ForeignKey("users.CustomUser", on_delete=models.CASCADE)
+    uploaded = models.FileField(upload_to='resources/', null=True, blank=True)
 
     def __str__(self):
         return self.title

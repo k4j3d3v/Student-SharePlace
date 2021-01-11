@@ -1,3 +1,4 @@
+from content.models import Course
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
@@ -29,3 +30,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+
+    def get_courses(self):
+        degree_id = self.degree.all().values_list('id')
+        return Course.objects.filter(degree__in=degree_id)

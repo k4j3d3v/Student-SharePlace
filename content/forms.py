@@ -1,5 +1,4 @@
-from content.models import Note, Experience, Course
-from django import forms
+from content.models import Note, Experience
 from django.forms import ModelForm
 
 
@@ -11,7 +10,7 @@ class AddNoteModelForm(ModelForm):
     def __init__(self, user=None, **kwargs):
         super(AddNoteModelForm, self).__init__(**kwargs)
         if user:
-            self.fields['course'].queryset = user.degree.course_set.all()
+            self.fields['course'].queryset = user.get_courses()  # .degree.course_set.all()
 
 
 class AddExperienceModelForm(ModelForm):
@@ -23,9 +22,9 @@ class AddExperienceModelForm(ModelForm):
         if user:
             print("user degree")
             print(user)
-            self.fields['course'].queryset = Course.objects.filter(degree=user.degree)
+            self.fields['course'].queryset = user.get_courses()
             self.fields['degree'].queryset = user.degree
-            self.fields['degree'].widget = forms.CheckboxSelectMultiple()
+            # self.fields['degree'].widget = forms.CheckboxSelectMultiple()
 
     class Meta:
         model = Experience

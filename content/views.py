@@ -136,8 +136,8 @@ class CoursesListView(LoginRequiredMixin, ListView):
         # print("User: %s" % (dir(user)))
         # subs = User.objects.filter(subscribed_to__subscriber=request.user).values_list('id')
         # profiles = UserCommunityProfile.objects.exclude(owner__in=subs)
-        degree_id = user.degree.all().values_list('id')
-        courses = Course.objects.filter(degree__in=degree_id)
+        # degree_id = user.degree.all().values_list('id')
+        # courses = Course.objects.filter(degree__in=degree_id)
         # qs = Course.objects.all()
         # for degree in user.degree.all():
         #     qs.union(Course.objects.filter(degree=degree))
@@ -147,7 +147,7 @@ class CoursesListView(LoginRequiredMixin, ListView):
         #     # print(Course.objects.filter(degree=degree))
         # print(f"Union {qs}")
         # return Course.objects.filter(degree=user.degree)
-        return courses
+        return user.get_courses()
 
     # TODO: https://docs.djangoproject.com/en/3.1/topics/db/examples/
     # start from here
