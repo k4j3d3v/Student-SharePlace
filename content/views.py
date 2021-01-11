@@ -147,15 +147,22 @@ class CoursesListView(LoginRequiredMixin, ListView):
         #     # print(Course.objects.filter(degree=degree))
         # print(f"Union {qs}")
         # return Course.objects.filter(degree=user.degree)
-        return user.get_courses()
+        courses_qs = user.get_courses()
+        courses = {}
+        for course in courses_qs:
+            courses[course] = (course.note_set.exclude(owner=user),
+                               course.experience_set.exclude(owner=user))
+        return courses
 
     # TODO: https://docs.djangoproject.com/en/3.1/topics/db/examples/
     # start from here
-    # def get_context_data(self, **kwargs):
-    # #     # Call the base implementation first to get a context
-    #     context = super().get_context_data(**kwargs)
-    #     user = CustomUser.objects.get(email=self.request.user.email)
-    # #     courses = Course.objects.filter(degree=user.degree)
-    # #     # Add in a QuerySet of all the books
-    #     # context['res_count'] =
-    #     return context
+    def get_context_data(self, **kwargs):
+        #     # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        user = CustomUser.objects.get(email=self.request.user.email)
+
+        #     courses = Course.objects.filter(degree=user.degree)
+        #     # Add in a QuerySet of all the books
+        context['notes'] = Note.objects.exclude(owner=user)
+        context['exps'] = Experience.objects.exclude(owner=user)
+        return context
