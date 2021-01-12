@@ -23,6 +23,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     degree = models.ManyToManyField("content.Degree")
     # degree = models.ForeignKey("content.Degree", on_delete=models.CASCADE, null=True)
     pic = models.ImageField(default='default.png', upload_to='profile_pics')
+    purchased_notes = models.ManyToManyField("content.Note")
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 

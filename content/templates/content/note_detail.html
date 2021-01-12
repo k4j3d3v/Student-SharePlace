@@ -1,9 +1,55 @@
 {% extends 'base.html' %}
 
+{% block headinfo %}
+<title> Note detail </title>
+
+<script>
+      function disableButton()
+      {
+          $('#purchase').addClass('disabled');
+          $('#purchase').html('Purchased');
+      }
+
+</script>
+{% endblock %}
+
 {% block content %}
 <p><strong>Title:</strong> {{ note.title }}</p>
 <p><strong>Publication Date:</strong> {{ note.publ_date }}</p>
 <p><strong>Price:</strong> {{ note.price }}</p>
 <p><strong>Course:</strong> {{ note.course }}</p>
+<button id="purchase" class="btn btn-primary">Purchase it!</button>
+
+{% if purchased %}
+<script>
+   disableButton();
+
+</script>
 <p><strong>File:</strong><a href="{{ note.uploaded.url }}">{{ note.get_filename }}</a></p>
+{% endif %}
+
+
+<script>
+    $('#purchase').click(function()
+        {
+            console.log("ciao merda");
+            $.ajax({
+                type: "POST",
+                url: "{% url 'content:note-buy' %}",
+                data: {'id': "{{ note.id }}", 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+                dataType: "json",
+                success: function(response)
+                {
+                  disableButton();
+                },
+                error: function(rs, e)
+                {
+                    //document.getElementById('message').style.color="red";
+                    //document.getElementById('message').innerText="Errore durante l'acquisto";
+                }
+            });
+        })
+
+</script>
+
 {% endblock %}

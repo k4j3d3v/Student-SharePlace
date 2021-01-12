@@ -1,7 +1,12 @@
+import json
+
 from content.forms import AddNoteModelForm, AddExperienceModelForm
 from content.models import Note, Experience, Course
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponse
 from django.urls import reverse_lazy
+from django.views.decorators.http import require_POST
 from django.views.generic import DetailView, CreateView, ListView
 from django.views.generic.edit import UpdateView, DeleteView
 from users.models import CustomUser
@@ -49,6 +54,13 @@ class NoteDelete(DeleteView):
 
 class NoteDetail(DetailView):
     model = Note
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        id = self.kwargs['pk']
+        user = CustomUser.objects.get(email=self.request.user.email)
+        context['purchased'] = True if user.purchased_notes.filter(id=id) else False
+        return context
 
 
 # How to make a common superclass for NoteUpdate and NoteCreate views
@@ -166,3 +178,26 @@ class CoursesListView(LoginRequiredMixin, ListView):
         context['notes'] = Note.objects.exclude(owner=user)
         context['exps'] = Experience.objects.exclude(owner=user)
         return context
+
+
+class PurchasedNotesList(LoginRequiredMixin, ListView):
+    model = Note
+    context_object_name = 'notes'
+    template_name = 'content/purchased_list.html'
+
+    def get_queryset(self):
+        user = CustomUser.objects.get(email=self.request.user.email)
+        return user.purchased_notes.all()
+
+
+@login_required
+@require_POST
+def buy_note(request):
+    print("ciao")
+    user = CustomUser.objects.get(email=request.user.email)
+    id = request.POST.get('id', None)
+    to_buy = Note.objects.filter(id=id).get()
+    user.purchased_notes.add(to_buy)
+    print(user.purchased_notes.all())
+    # ctx = {'valid': valid, 'message': message}
+    return HttpResponse(json.dumps({}), content_type='application/json')
