@@ -8,6 +8,7 @@
       {
           $('#purchase').addClass('disabled');
           $('#purchase').html('Purchased');
+          $('.container').append('<p><strong>File:</strong><a href="{{ note.uploaded.url }}">{{ note.get_filename }}</a></p>');
       }
 
 </script>
@@ -18,14 +19,15 @@
 <p><strong>Publication Date:</strong> {{ note.publ_date }}</p>
 <p><strong>Price:</strong> {{ note.price }}</p>
 <p><strong>Course:</strong> {{ note.course }}</p>
+
 <button id="purchase" class="btn btn-primary">Purchase it!</button>
+<a id="exchange" class="btn btn-primary" href="{% url 'content:note-exchange' pk=note.pk %}">Exchange it!</a>
 
 {% if purchased %}
 <script>
    disableButton();
 
 </script>
-<p><strong>File:</strong><a href="{{ note.uploaded.url }}">{{ note.get_filename }}</a></p>
 {% endif %}
 
 
@@ -50,6 +52,8 @@
             });
         })
 
+
+    })
 </script>
 
 {% endblock %}

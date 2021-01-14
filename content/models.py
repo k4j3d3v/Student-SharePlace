@@ -66,3 +66,16 @@ class Experience(Resource):
     course = models.ManyToManyField(Course)  # , related_name="related_to")
     degree = models.ForeignKey(Degree, on_delete=models.CASCADE, null=True, blank=True)
     uploaded = models.FileField(upload_to='resources/', null=True, blank=True)
+
+
+class ExchangeRequest(models.Model):
+    user_requester = models.ForeignKey("users.CustomUser", on_delete=models.CASCADE, related_name="requester")
+    user_receiver = models.ForeignKey("users.CustomUser", on_delete=models.CASCADE, related_name="receiver")
+    proposed_note = models.OneToOneField(Note, on_delete=models.CASCADE, related_name="proposed")
+    requested_note = models.OneToOneField(Note, on_delete=models.CASCADE, related_name="requested")
+    accepted = models.BooleanField(default=False)
+    date = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f"{self.user_requester.username} wants exchange his <{self.proposed_note}> note with {self.user_receiver} " \
+               f"notes about <{self.requested_note}>"

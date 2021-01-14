@@ -1,9 +1,10 @@
 import json
 
-from content.forms import AddNoteModelForm, AddExperienceModelForm
+from content.forms import AddNoteModelForm, AddExperienceModelForm, ExchangeRequestModelForm
 from content.models import Note, Experience, Course
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.views.decorators.http import require_POST
@@ -119,12 +120,6 @@ class NoteCreate(LoginRequiredMixin, CreateView):
     # return render(request, 'content/note_add.html', {'form': form})
 
 
-def get_exact_match(model_class, m2m_field, ids):
-    query = model_class.objects.all()
-    for _id in ids:
-        query = query.filter(**{m2m_field: _id})
-    return query
-
 
 class CoursesListView(LoginRequiredMixin, ListView):
     model = Course
@@ -193,7 +188,6 @@ class PurchasedNotesList(LoginRequiredMixin, ListView):
 @login_required
 @require_POST
 def buy_note(request):
-    print("ciao")
     user = CustomUser.objects.get(email=request.user.email)
     id = request.POST.get('id', None)
     to_buy = Note.objects.filter(id=id).get()
@@ -201,3 +195,37 @@ def buy_note(request):
     print(user.purchased_notes.all())
     # ctx = {'valid': valid, 'message': message}
     return HttpResponse(json.dumps({}), content_type='application/json')
+
+
+class ExchangeNote(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+    form_class = ExchangeRequestModelForm
+    template_name = "content/note_exchange_form.html"
+    success_url = reverse_lazy('dashboard')
+    success_message = "Exchange will be notified %s." \
+                      "He will decide if accept your exchange proposal."
+
+    def form_valid(self, form):
+        # response = super(type(self), self).form_valid(form)
+        # do something with self.object
+        self.object = form.save()
+
+        print("object %s" % self.object)
+        return super(type(self), self).form_valid(form)
+
+    def get_form_kwargs(self):
+        kwargs = super(ExchangeNote, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        kwargs['pk'] = self.kwargs['pk']
+        return kwargs
+
+    def get_success_message(self, cleaned_data):
+        return self.success_message % self.object.user_receiver.username
+# @login_required
+# @require_POST
+# def exchange_note(request):
+#     user = CustomUser.objects.get(email=request.user.email)
+#     id = request.POST.get('id', None)
+#     to_buy = Note.objects.filter(id=id).get()
+#     user.purchased_notes.add(to_buy)
+#     print(user.purchased_notes.all())
+#     return HttpResponse(json.dumps({}), content_type='application/json')
