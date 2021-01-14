@@ -1,7 +1,7 @@
 from content.views import CoursesListView
 from content.views import NoteDetail, NoteCreate, NoteUpdate, NoteDelete, \
     ExperienceDetail, ExperienceUpdate, ExperienceDelete, ExperienceCreate, \
-    PurchasedNotesList, buy_note, ExchangeNote
+    PurchasedNotesList, buy_note, ExchangeNote, ExchangeRequestList, manage_exchange
 from django.urls import path
 
 
@@ -16,6 +16,8 @@ urlpatterns = [
     path('notes/add', NoteCreate.as_view(), name='note-add'),
     path('notes/buy', buy_note, name='note-buy'),
     path('notes/exchange/<int:pk>', ExchangeNote.as_view(), name='note-exchange'),
+    path('requests/exchange/', ExchangeRequestList.as_view(), name='note-request'),
+    path('requests/action/', manage_exchange, name='request-action'),
     path('experience/details/<int:pk>', ExperienceDetail.as_view(), name='experience-detail'),
     path('experience/update/<int:pk>', ExperienceUpdate.as_view(), name='experience-update'),
     path('experience/delete/<int:pk>', ExperienceDelete.as_view(), name='experience-delete'),

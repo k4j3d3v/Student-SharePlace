@@ -1,38 +1,52 @@
 {% extends 'base.html' %}
+{% load humanize %}
 
 {% block content %}
-<h2>Your Degree Courses</h2>
+<h2>Exchange request</h2>
 
 <ul>
-    {% for course, res in courses_list.items %}
-    <li>{{ course }}
-        <h4><span class="badge badge-primary badge-pill">{{ res.0.count }}</span> Notes about your courses:
-        </h4>
-        <ul>
-            {% if res.0.count > 0 %}
-            {% for note in res.0 %}
-            <li><a href="{% url 'content:note-detail' pk=note.pk %}"> {{ note }} </a></li>
-
-            {% endfor %}
-            {% else %}
-            <li> No related notes.</li>
-            {% endif %}
-        </ul>
-        <h4><span class="badge badge-primary badge-pill">{{ res.1.count }}</span> Experience about your
-            courses:</h4>
-        <ul>
-            {% if res.1.count > 0 %}
-            {% for ex in res.1 %}
-            <li><a href="{% url 'content:experience-detail' pk=ex.pk %}"> {{ ex }} </a></li>
-
-            {% endfor %}
-            {% else %}
-            <li> No related experiences.</li>
-            {% endif %}
-        </ul>
+    {% for req in reqs %}
+    <li id="{{req.id}}">
+        <p>{{ req.user_requester }} wants exchange his {{ req.proposed_note }} with your {{ req.requested_note }}</p>
+        <p>
+        <form method='POST' id="accept-form" action="{% url 'content:request-action' %}">
+            {% csrf_token %}
+            <input type="hidden" value="{{req.id}}" name="req"/>
+            <input class="btn btn-success" type='submit' value='Accept' id='accept'/>
+        </form>
+        </p>
+        <p>{{ req.date|naturaltime }}</p>
     </li>
-
+    {% empty %}
+    <li>You have no unread notification.</li>
     {% endfor %}
 </ul>
 
+<script type="text/javascript">
+    var frm = $('#accept-form');
+    frm.submit(function () {
+        console.log("dioporco");
+        $.ajax({
+            type: frm.attr('method'),
+            url: frm.attr('action'),
+            data: frm.serialize() + "&action=accept",
+            success: function (data) {
+                  console.log("#"+data.id);
+                  $("#"+data.id).css("background-color", "yellow");
+//                $("#"+data.id).remove();
+            },
+            error: function(data) {
+                //$("#MESSAGE-DIV").html("Something went wrong!");
+                alert("error"+data);
+            }
+        });
+        return false;
+    });
+
+</script>
 {% endblock %}
+
+
+
+
+

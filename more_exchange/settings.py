@@ -29,7 +29,7 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '*&15=$v-&brwa^w3@ti-74^^5e6=n6kty^!h+-tj#4^n^##7ih'
+SECRET_KEY = 'password'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
+    'django.contrib.humanize',
 ]
 
 MIDDLEWARE = [
@@ -132,11 +133,6 @@ STATIC_URL = '/static/'
 LOGIN_REDIRECT_URL = "dashboard"
 LOGOUT_REDIRECT_URL = "dashboard"
 
-EMAIL_HOST = "smtp.mailgun.org"
-EMAIL_PORT = 587
-EMAIL_HOST_USER = "postmaster@sandbox82ab12d067a8480b9aed1675a84ce4c8.mailgun.org"
-EMAIL_HOST_PASSWORD = "bf81c7af2ffe1666542a2ac662bf9b2c-4d640632-86d16e6e"
-EMAIL_USE_TLS = True
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 

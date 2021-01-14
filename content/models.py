@@ -79,3 +79,7 @@ class ExchangeRequest(models.Model):
     def __str__(self):
         return f"{self.user_requester.username} wants exchange his <{self.proposed_note}> note with {self.user_receiver} " \
                f"notes about <{self.requested_note}>"
+
+
+class Notification(models.Model):
+    user_receiver = models.ForeignKey("users.CustomUser", on_delete=models.CASCADE)

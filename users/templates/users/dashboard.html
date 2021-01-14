@@ -17,6 +17,7 @@ Hello,
     <a href="{% url 'content:course-list' %}">Your Courses</a>
     <a href="{% url 'edit_profile' %}">Edit your profile!</a>
     <a href="{% url 'content:purchased-list' %}">Purchased Notes</a>
+    <a href="{% url 'content:note-request' %}">Exchange Request</a>
     {% else %}
     <a href="{% url 'login' %}">Login</a>
     <a href="{% url 'register' %}">Join Us!</a>

@@ -1,7 +1,7 @@
 import json
 
 from content.forms import AddNoteModelForm, AddExperienceModelForm, ExchangeRequestModelForm
-from content.models import Note, Experience, Course
+from content.models import Note, Experience, Course, ExchangeRequest
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
@@ -120,40 +120,15 @@ class NoteCreate(LoginRequiredMixin, CreateView):
     # return render(request, 'content/note_add.html', {'form': form})
 
 
-
 class CoursesListView(LoginRequiredMixin, ListView):
     model = Course
     context_object_name = 'courses_list'
     template_name = 'content/course_list.html'
 
-    # def get_queryset(self):
-    #     # TODO: fix missing degree field in admin user
-    #     print("email: %s \n" % self.request.user.email)
-    #     user = CustomUser.objects.get(email=self.request.user.email)
-    #     experiences = Experience.objects.none()#filter(owner=user).values_list('id', flat=True)
-    #     print(experiences)
-    #     lista_corsi = get_exact_match(Course, "courses", experiences)
-    #     print(lista_corsi)
-    #     return lista_corsi
-
     def get_queryset(self):
         # TODO: fix missing degree field in admin user
         print("email: %s \n" % self.request.user.email)
         user = CustomUser.objects.get(email=self.request.user.email)
-        # print("User: %s" % (dir(user)))
-        # subs = User.objects.filter(subscribed_to__subscriber=request.user).values_list('id')
-        # profiles = UserCommunityProfile.objects.exclude(owner__in=subs)
-        # degree_id = user.degree.all().values_list('id')
-        # courses = Course.objects.filter(degree__in=degree_id)
-        # qs = Course.objects.all()
-        # for degree in user.degree.all():
-        #     qs.union(Course.objects.filter(degree=degree))
-        #     print(f"Union {qs}")
-        #
-        #     # print("Degree: %s"%degree)
-        #     # print(Course.objects.filter(degree=degree))
-        # print(f"Union {qs}")
-        # return Course.objects.filter(degree=user.degree)
         courses_qs = user.get_courses()
         courses = {}
         for course in courses_qs:
@@ -164,12 +139,8 @@ class CoursesListView(LoginRequiredMixin, ListView):
     # TODO: https://docs.djangoproject.com/en/3.1/topics/db/examples/
     # start from here
     def get_context_data(self, **kwargs):
-        #     # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
         user = CustomUser.objects.get(email=self.request.user.email)
-
-        #     courses = Course.objects.filter(degree=user.degree)
-        #     # Add in a QuerySet of all the books
         context['notes'] = Note.objects.exclude(owner=user)
         context['exps'] = Experience.objects.exclude(owner=user)
         return context
@@ -220,12 +191,51 @@ class ExchangeNote(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 
     def get_success_message(self, cleaned_data):
         return self.success_message % self.object.user_receiver.username
-# @login_required
-# @require_POST
-# def exchange_note(request):
-#     user = CustomUser.objects.get(email=request.user.email)
-#     id = request.POST.get('id', None)
-#     to_buy = Note.objects.filter(id=id).get()
-#     user.purchased_notes.add(to_buy)
-#     print(user.purchased_notes.all())
-#     return HttpResponse(json.dumps({}), content_type='application/json')
+
+
+class ExchangeRequestList(LoginRequiredMixin, ListView):
+    model = ExchangeRequest
+    context_object_name = 'reqs'
+    template_name = 'content/exchange_request_list.html'
+
+    def get_queryset(self):
+        # TODO: fix missing degree field in admin user
+        user = CustomUser.objects.get(email=self.request.user.email)
+        req = ExchangeRequest.objects.filter(user_receiver=user)
+        return req
+
+    # TODO: https://docs.djangoproject.com/en/3.1/topics/db/examples/
+    # start from here
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = CustomUser.objects.get(email=self.request.user.email)
+        context['notes'] = Note.objects.exclude(owner=user)
+        context['exps'] = Experience.objects.exclude(owner=user)
+        return context
+
+
+@login_required
+@require_POST
+def buy_note(request):
+    user = CustomUser.objects.get(email=request.user.email)
+    id = request.POST.get('id', None)
+    to_buy = Note.objects.filter(id=id).get()
+    user.purchased_notes.add(to_buy)
+    print(user.purchased_notes.all())
+    # ctx = {'valid': valid, 'message': message}
+    return HttpResponse(json.dumps({}), content_type='application/json')
+
+
+@login_required
+@require_POST
+def manage_exchange(request):
+    user = CustomUser.objects.get(email=request.user.email)
+    id = request.POST.get('req', None)
+    action = request.POST.get('action', None)
+    exch_req = ExchangeRequest.objects.filter(id=id).get()
+    if exch_req and action == 'accept':
+        exch_req.accepted = True
+        exch_req.user_requester.purchased_notes.add(exch_req.requested_note)
+        user.purchased_notes.add(exch_req.proposed_note)
+        exch_req.delete()
+    return HttpResponse(json.dumps({'id': id}), content_type='application/json')
