@@ -1,11 +1,11 @@
 import json
 
 from content.forms import AddNoteModelForm, AddExperienceModelForm, ExchangeRequestModelForm
-from content.models import Note, Experience, Course, ExchangeRequest
+from content.models import Note, Experience, Course, ExchangeRequest, Notification
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotFound
 from django.urls import reverse_lazy
 from django.views.decorators.http import require_POST
 from django.views.generic import DetailView, CreateView, ListView
@@ -214,6 +214,17 @@ class ExchangeRequestList(LoginRequiredMixin, ListView):
         return context
 
 
+class NotificationList(LoginRequiredMixin, ListView):
+    model = Notification
+    context_object_name = 'notifs'
+    template_name = 'content/notifications_list.html'
+
+    def get_queryset(self):
+        # TODO: fix missing degree field in admin user
+        user = CustomUser.objects.get(email=self.request.user.email)
+        return Notification.objects.filter(user_receiver=user)
+
+
 @login_required
 @require_POST
 def buy_note(request):
@@ -237,5 +248,16 @@ def manage_exchange(request):
         exch_req.accepted = True
         exch_req.user_requester.purchased_notes.add(exch_req.requested_note)
         user.purchased_notes.add(exch_req.proposed_note)
-        exch_req.delete()
+        Notification.objects.create(user_receiver=exch_req.user_requester, request=exch_req)
     return HttpResponse(json.dumps({'id': id}), content_type='application/json')
+
+
+@login_required
+@require_POST
+def delete_notification(request):
+    not_id = request.POST.get('id', None)
+    n = Notification.objects.get(id=not_id)
+    if n:
+        n.delete()
+        return HttpResponse(json.dumps({}), content_type='application/json')
+    return HttpResponseNotFound('<h1>Page not found</h1>')

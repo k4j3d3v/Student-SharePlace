@@ -83,3 +83,9 @@ class ExchangeRequest(models.Model):
 
 class Notification(models.Model):
     user_receiver = models.ForeignKey("users.CustomUser", on_delete=models.CASCADE)
+    request = models.ForeignKey(ExchangeRequest, on_delete=models.CASCADE)
+    date = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        action = "accepted" if self.request else "rejected"
+        return f"{self.request.user_receiver} has {action} your exchange proposal."
