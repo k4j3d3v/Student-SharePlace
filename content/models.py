@@ -71,14 +71,18 @@ class Experience(Resource):
 class ExchangeRequest(models.Model):
     user_requester = models.ForeignKey("users.CustomUser", on_delete=models.CASCADE, related_name="requester")
     user_receiver = models.ForeignKey("users.CustomUser", on_delete=models.CASCADE, related_name="receiver")
-    proposed_note = models.OneToOneField(Note, on_delete=models.CASCADE, related_name="proposed")
-    requested_note = models.OneToOneField(Note, on_delete=models.CASCADE, related_name="requested")
+    proposed_note = models.ForeignKey(Note, on_delete=models.CASCADE, related_name="proposed")
+    requested_note = models.ForeignKey(Note, on_delete=models.CASCADE, related_name="requested")
     accepted = models.BooleanField(default=False)
+    seen = models.BooleanField(default=False)
     date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return f"{self.user_requester.username} wants exchange his <{self.proposed_note}> note with {self.user_receiver} " \
                f"notes about <{self.requested_note}>"
+
+    class Meta:
+        unique_together = ('proposed_note', 'requested_note')
 
 
 class Notification(models.Model):
@@ -87,5 +91,5 @@ class Notification(models.Model):
     date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        action = "accepted" if self.request else "rejected"
+        action = "accepted" if self.request.accepted else "rejected"
         return f"{self.request.user_receiver} has {action} your exchange proposal."

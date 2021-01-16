@@ -48,13 +48,15 @@
     });
 
     var rej_frm = $('#reject-form');
-    frm.submit(function () {
+    rej_frm.submit(function () {
         $.ajax({
             type: rej_frm.attr('method'),
             url: rej_frm.attr('action'),
             data: rej_frm.serialize() + "&action=reject",
+            datatype: "json",
             success: function (data) {
                   $("#"+data.id).fadeOut(300, function() { $(this).remove(); });
+                  console.log("rejected");
 
             },
             error: function(data) {

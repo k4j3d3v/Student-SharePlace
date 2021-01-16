@@ -25,8 +25,10 @@
             type: "POST",
             url: "{% url 'content:notif-delete' %}" ,
             data: {"id": id, 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+            datatype: "json",
             success: function (data) {
                 console.log("anotherdioporco");
+                console.log("#"+data.id);
                 $("#"+data.id).fadeOut(600, function() { $(this).remove(); });
 
             },

@@ -201,8 +201,8 @@ class ExchangeRequestList(LoginRequiredMixin, ListView):
     def get_queryset(self):
         # TODO: fix missing degree field in admin user
         user = CustomUser.objects.get(email=self.request.user.email)
-        req = ExchangeRequest.objects.filter(user_receiver=user)
-        return req
+        req = ExchangeRequest.objects.filter(user_receiver=user).filter(seen=False)
+        return req.order_by('-date')
 
     # TODO: https://docs.djangoproject.com/en/3.1/topics/db/examples/
     # start from here
@@ -222,7 +222,7 @@ class NotificationList(LoginRequiredMixin, ListView):
     def get_queryset(self):
         # TODO: fix missing degree field in admin user
         user = CustomUser.objects.get(email=self.request.user.email)
-        return Notification.objects.filter(user_receiver=user)
+        return Notification.objects.filter(user_receiver=user).order_by('-date')
 
 
 @login_required
@@ -244,10 +244,15 @@ def manage_exchange(request):
     id = request.POST.get('req', None)
     action = request.POST.get('action', None)
     exch_req = ExchangeRequest.objects.filter(id=id).get()
-    if exch_req and action == 'accept':
-        exch_req.accepted = True
-        exch_req.user_requester.purchased_notes.add(exch_req.requested_note)
-        user.purchased_notes.add(exch_req.proposed_note)
+    if exch_req:
+        if action == 'accept':
+            exch_req.accepted = True
+            exch_req.user_requester.purchased_notes.add(exch_req.requested_note)
+            user.purchased_notes.add(exch_req.proposed_note)
+        elif action == 'reject':
+            exch_req.accepted = False
+        exch_req.seen = True
+        exch_req.save()
         Notification.objects.create(user_receiver=exch_req.user_requester, request=exch_req)
     return HttpResponse(json.dumps({'id': id}), content_type='application/json')
 
@@ -256,8 +261,9 @@ def manage_exchange(request):
 @require_POST
 def delete_notification(request):
     not_id = request.POST.get('id', None)
-    n = Notification.objects.get(id=not_id)
+    n = Notification.objects.filter(id=not_id).get()
     if n:
+        n.request.delete()
         n.delete()
-        return HttpResponse(json.dumps({}), content_type='application/json')
+        return HttpResponse(json.dumps({"id": not_id}), content_type='application/json')
     return HttpResponseNotFound('<h1>Page not found</h1>')
