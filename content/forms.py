@@ -20,16 +20,14 @@ class AddExperienceModelForm(ModelForm):
         # TODO: manage degree or course choice for experience
         # self.fields['degree'].widget = forms.TextInput()
         if user:
-            print("user degree")
-            print(user)
             self.fields['course'].queryset = user.get_courses()
             self.fields['degree'].queryset = user.degree
-            # self.fields['degree'].widget = forms.CheckboxSelectMultiple()
+            # self.fields['text'].widget = TinyMCE()
+            # # (attrs={'cols': 80, 'rows': 30}
 
     class Meta:
         model = Experience
         exclude = ['owner', 'publ_date']
-
 
 class ExchangeRequestModelForm(ModelForm):
 

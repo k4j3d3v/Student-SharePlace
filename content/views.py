@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponse, HttpResponseNotFound
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.decorators.http import require_POST
 from django.views.generic import DetailView, CreateView, ListView
 from django.views.generic.edit import UpdateView, DeleteView
@@ -26,8 +26,19 @@ class ExperienceDelete(DeleteView):
     template_name = 'content/note_confirm_delete.html'
 
 
+#
+# class ExperienceDetail(DetailView):
+#     model = Experience
+
 class ExperienceDetail(DetailView):
     model = Experience
+    date_field = "publish"
+    month_format = "%m"
+
+    def get_context_data(self, **kwargs):
+        context = super(ExperienceDetail, self).get_context_data(**kwargs)
+        context.update({'next': reverse('comments-xtd-sent')})
+        return context
 
 
 class ExperienceCreate(LoginRequiredMixin, CreateView):

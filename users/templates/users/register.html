@@ -1,14 +1,164 @@
-{% extends 'base.html' %}
+{% extends 'layouts/base-fullscreen.html' %}
 {% load crispy_forms_tags %}
 
+{% block title %} Register {% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+<style>
+body {
+  background-color: #efefef;
+}
+
+.profile-pic {
+    max-width: 200px;
+    max-height: 200px;
+    display: block;
+}
+
+.file-upload {
+    display: none;
+}
+.circle {
+    border-radius: 1000px !important;
+    overflow: hidden;
+    width: 128px;
+    height: 128px;
+    border: 8px solid rgba(229, 229, 229, 0.7);
+    /*position: absolute;*/
+    top: 72px;
+}
+img {
+    max-width: 100%;
+    height: auto;
+}
+.p-image {
+ /* position: absolute;*/
+  top: 167px;
+  right: 30px;
+  color: #666666;
+  margin:auto;
+  transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+}
+.p-image:hover {
+  transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+}
+.upload-button {
+  font-size: 1.2em;
+}
+
+.upload-button:hover {
+  transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+  color: #999;
+}
+
+
+
+
+</style>
+
+{% endblock stylesheets %}
+
 {% block content %}
-<h2>Register</h2>
 
-<form method="post">
-    {% csrf_token %}
-    {{ form|crispy}}
-    <input type="submit" value="Register" class="btn btn-success">
-</form>
+<!-- Page content -->
+<div class="container mt--8 pb-5">
+  <!-- Table -->
+  <div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8">
 
-<a href="{% url 'login' %}">Back to login</a>
-{% endblock %}
+      <div class="card bg-secondary shadow border-0">
+        <div class="card-body px-lg-5 py-lg-5">
+          <div class="text-center text-muted mb-4">
+
+            {% if msg %}
+            <small>{{ msg }}</small>
+            {% else %}
+            Add your credentials or <a href={% url 'login' %} >authenticate</a> with an existing account.
+            {% endif %}
+
+          </div>
+
+          {% if success %}
+
+          <p class="text-center">
+            Please <a href={% url 'login' %} class="text-black text-small">authenticate</a> using the new account.
+          </p>
+
+          {% else %}
+
+          <form method="POST">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <div class="text-center">
+              <button type="submit" class="btn btn-primary mt-4">Create account</button>
+            </div>
+          </form>
+          {% endif %}
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="row mt-3">
+    <div class="col-3"></div>
+    <div class="col-3">
+      <a href="{% url 'login' %}" class="text-light"><small>Login</small></a>
+    </div>
+    <div class="col-3 text-right">
+      <a target="_blank"
+         href="https://appseed.us" class="text-light"><small>LIVE Support</small></a>
+    </div>
+  </div>
+
+</div>
+</div>
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE -->
+{% block javascripts %}
+<script>
+  $('#pic_inp').change(function () {
+
+    var reader = new FileReader();
+    reader.onload = readSuccess;
+    function readSuccess(e) {
+                $('#pic').attr('src', e.target.result);
+    }
+    // read the image file as a data URL.
+    reader.readAsDataURL(this.files[0]);
+});
+
+
+$(document).ready(function() {
+
+
+    var readURL = function(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('.profile-pic').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+
+    $(".file-upload").on('change', function(){
+        readURL(this);
+    });
+
+    $(".upload-button").on('click', function() {
+       $(".file-upload").click();
+    });
+});
+
+
+</script>
+
+{% endblock javascripts %}

@@ -1,12 +1,19 @@
 {% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block headinfo %}
+<title>Experience</title>
+{% endblock %}
 
 {% block content %}
-<p><strong>Title:</strong> {{ experience.title }}</p>
-<p><strong>Publication Date:</strong> {{ experience.publ_date }}</p>
-<p><strong>Kind of:</strong> {{ experience.kind_of }}</p>
-<p><strong>Text:</strong> {{ experience.text }}</p>
-{% if experience.uploaded %}
-<p><strong>File:</strong><a href="{{ experience.uploaded.url }}">{{ experience.get_filename }}</a></p>
+<p><strong>Title:</strong> {{ object.title }}</p>
+<p><strong>Publication Date:</strong> {{ object.publ_date }}</p>
+<p><strong>Kind of:</strong> {{ object.kind_of }}</p>
+<p><strong>Text:</strong> {{ object.text|safe }}</p>
+{% if object.uploaded %}
+<p><strong>File:</strong><a href="{{ object.uploaded.url }}">{{ object.get_filename }}</a></p>
 {% endif %}
-
+{% include 'comments/comments.html' with pk=object.pk %}
 {% endblock %}

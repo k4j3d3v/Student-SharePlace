@@ -25,6 +25,9 @@ MESSAGE_TAGS = {
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 
+INTERNAL_IPS = [
+    '127.0.0.1'
+]
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
@@ -35,22 +38,6 @@ SECRET_KEY = '*&15=$v-&brwa^w3@ti-74^^5e6=n6kty^!h+-tj#4^n^##7ih'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
-# Application definition
-
-INSTALLED_APPS = [
-    'users',
-    'content',
-    'crispy_forms',
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'django_extensions',
-    'django.contrib.humanize',
-]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -64,10 +51,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'more_exchange.urls'
 
+TEMPLATE_DIR = os.path.join(BASE_DIR, "more_exchange/templates")  # ROOT dir for templates
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [TEMPLATE_DIR],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -117,7 +105,10 @@ AUTH_USER_MODEL = 'users.CustomUser'
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+# for comment system
+SITE_ID = 1
+
+TIME_ZONE = 'Europe/Rome'
 
 USE_I18N = True
 
@@ -129,13 +120,57 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+# Extra places for collectstatic to find static files.
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'more_exchange/static'),
+)
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+)
+ROOT_URLCONF = 'more_exchange.urls'
+
+# Application definition
+
+INSTALLED_APPS = [
+
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'django_extensions',
+    'django.contrib.humanize',
+
+    'tinymce',
+    'crispy_forms',
+    'users',
+    'content',
+
+    'django_comments_xtd',
+    'django_comments',
+]
 
 LOGIN_REDIRECT_URL = "dashboard"
 LOGOUT_REDIRECT_URL = "dashboard"
-
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 MEDIA_URL = '/media/'
+
+# for comment system
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+COMMENT_APP = 'django_comments_xtd'
+COMMENTS_XTD_CONFIRM_EMAIL = True
+COMMENTS_XTD_SALT = b"es-war-einmal-una-bella-princesa-in-a-beautiful-castle"
+COMMENTS_XTD_FROM_EMAIL = 'noreply@example.com'
+COMMENTS_XTD_CONTACT_EMAIL = 'helpdesk@example.com'
+COMMENTS_XTD_MAX_THREAD_LEVEL = 0  # Default value
+COMMENTS_XTD_THREADED_EMAILS = False
+COMMENTS_XTD_SEND_HTML_EMAIL = True

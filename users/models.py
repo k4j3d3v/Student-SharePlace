@@ -35,3 +35,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     def get_courses(self):
         degree_id = self.degree.all().values_list('id')
         return Course.objects.filter(degree__in=degree_id)
+
+    def get_full_name(self):
+        return self.username

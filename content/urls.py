@@ -5,8 +5,6 @@ from content.views import NoteDetail, NoteCreate, NoteUpdate, NoteDelete, \
     NotificationList, delete_notification
 from django.urls import path
 
-
-
 app_name = 'content'
 
 urlpatterns = [

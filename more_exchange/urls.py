@@ -18,10 +18,15 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
+admin.autodiscover()
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('users.urls'), name='users'),
     path('', include('content.urls')),
+    path('tinymce/', include('tinymce.urls')),
+    path('comments/', include('django_comments_xtd.urls')),
+
 ]
 
 # TODO serve files in right way
