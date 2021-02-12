@@ -1,4 +1,5 @@
 from content.models import Note, Experience
+from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import render
@@ -14,25 +15,17 @@ def dashboard(request):
     return render(request, "users/dashboard.html")
 
 
-# def register(request):
-#     if request.method == "POST":
-#         form = CustomUserCreationForm(request.POST)
-#         if form.is_valid():
-#             print(form.cleaned_data['degree'])
-#             user = form.save()
-#             user.username = form.cleaned_data['email'] if not user.username else user.username
-#             login(request, user)
-#             return redirect(reverse("dashboard"))
-#     else:
-#         form = CustomUserCreationForm()
-#
-#     return render(request, "users/register.html", {"form": form})
-
 class UserCreate(SuccessMessageMixin, CreateView):
     form_class = CustomUserCreationForm
     model = CustomUser
     template_name = "users/register.html"
     success_url = reverse_lazy('dashboard')
+
+    def form_valid(self, form):
+        valid = super(UserCreate, self).form_valid(form)
+        user = self.object
+        login(self.request, user)
+        return valid
 
     # def form_valid(self, form):
     #     form.instance.owner = self.request.user
@@ -48,6 +41,7 @@ class ProfileUpdate(LoginRequiredMixin, UpdateView):
     model = CustomUser
     form_class = CustomUserChangeForm
     template_name = 'users/user_update_form.html'
+    success_url = reverse_lazy('edit_profile')
 
     def get_object(self):
         return self.request.user

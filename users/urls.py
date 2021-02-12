@@ -1,5 +1,6 @@
+from django.contrib.auth import views as auth_views
 from django.urls import path, include
-
+from users.forms import UserLoginForm
 from users.views import dashboard, UserCreate, NotesListView, ExperiencesListView, ProfileUpdate
 
 # app_name = 'users'
@@ -7,6 +8,7 @@ from users.views import dashboard, UserCreate, NotesListView, ExperiencesListVie
 
 urlpatterns = [
     path('', dashboard, name='dashboard'),
+    path('accounts/login/', auth_views.LoginView.as_view(authentication_form=UserLoginForm)),
     path('accounts/', include('django.contrib.auth.urls')),
     path('content/', include('content.urls')),
     # path('register/', register, name='register'),

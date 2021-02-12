@@ -123,12 +123,9 @@ STATIC_URL = '/static/'
 # Extra places for collectstatic to find static files.
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'more_exchange/static'),
+    os.path.join(BASE_DIR, 'users/static'),
 )
 
-STATICFILES_FINDERS = (
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-)
 ROOT_URLCONF = 'more_exchange.urls'
 
 # Application definition
@@ -163,14 +160,14 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 MEDIA_URL = '/media/'
 
-# for comment system
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
-COMMENT_APP = 'django_comments_xtd'
-COMMENTS_XTD_CONFIRM_EMAIL = True
-COMMENTS_XTD_SALT = b"es-war-einmal-una-bella-princesa-in-a-beautiful-castle"
-COMMENTS_XTD_FROM_EMAIL = 'noreply@example.com'
-COMMENTS_XTD_CONTACT_EMAIL = 'helpdesk@example.com'
-COMMENTS_XTD_MAX_THREAD_LEVEL = 0  # Default value
-COMMENTS_XTD_THREADED_EMAILS = False
-COMMENTS_XTD_SEND_HTML_EMAIL = True
+# # for comment system
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+#
+# COMMENT_APP = 'django_comments_xtd'
+# COMMENTS_XTD_CONFIRM_EMAIL = True
+# COMMENTS_XTD_SALT = b"es-war-einmal-una-bella-princesa-in-a-beautiful-castle"
+# COMMENTS_XTD_FROM_EMAIL = 'noreply@example.com'
+# COMMENTS_XTD_CONTACT_EMAIL = 'helpdesk@example.com'
+# COMMENTS_XTD_MAX_THREAD_LEVEL = 0  # Default value
+# COMMENTS_XTD_THREADED_EMAILS = False
+# COMMENTS_XTD_SEND_HTML_EMAIL = True

@@ -1,61 +1,13 @@
 {% extends 'layouts/base-fullscreen.html' %}
+{% load static %}
 {% load crispy_forms_tags %}
 
 {% block title %} Register {% endblock title %}
 
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}
-<style>
-body {
-  background-color: #efefef;
-}
 
-.profile-pic {
-    max-width: 200px;
-    max-height: 200px;
-    display: block;
-}
-
-.file-upload {
-    display: none;
-}
-.circle {
-    border-radius: 1000px !important;
-    overflow: hidden;
-    width: 128px;
-    height: 128px;
-    border: 8px solid rgba(229, 229, 229, 0.7);
-    /*position: absolute;*/
-    top: 72px;
-}
-img {
-    max-width: 100%;
-    height: auto;
-}
-.p-image {
- /* position: absolute;*/
-  top: 167px;
-  right: 30px;
-  color: #666666;
-  margin:auto;
-  transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
-}
-.p-image:hover {
-  transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
-}
-.upload-button {
-  font-size: 1.2em;
-}
-
-.upload-button:hover {
-  transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
-  color: #999;
-}
-
-
-
-
-</style>
+<link href="{% static 'css/picture_chooser.css' %}" rel="stylesheet"/>
 
 {% endblock stylesheets %}
 
@@ -69,32 +21,44 @@ img {
 
       <div class="card bg-secondary shadow border-0">
         <div class="card-body px-lg-5 py-lg-5">
-          <div class="text-center text-muted mb-4">
+            <div class="text-center text-muted mb-4">
 
-            {% if msg %}
-            <small>{{ msg }}</small>
-            {% else %}
-            Add your credentials or <a href={% url 'login' %} >authenticate</a> with an existing account.
-            {% endif %}
+                {% if form.errors %}
+                {% for field in form %}
+                {% for error in field.errors %}
+                <div class="alert alert-danger" role="alert">
+                    <strong>{{ error|escape }}</strong>
+                </div>
+                {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                <div class="alert alert-danger" role="alert">
+                    <strong>{{ error|escape }}</strong>
+                </div>
+                {% endfor %}
+                {% else %}
+                Add your credentials or <a href={% url 'login' %} >authenticate</a> with an existing account.
+                {% endif %}
 
-          </div>
-
-          {% if success %}
-
-          <p class="text-center">
-            Please <a href={% url 'login' %} class="text-black text-small">authenticate</a> using the new account.
-          </p>
-
-          {% else %}
-
-          <form method="POST">
-            {% csrf_token %}
-            {{ form|crispy }}
-            <div class="text-center">
-              <button type="submit" class="btn btn-primary mt-4">Create account</button>
             </div>
-          </form>
-          {% endif %}
+
+            {% if success %}
+
+            <p class="text-center">
+                Please <a href={% url 'login' %} class="text-black text-small">authenticate</a> using the new account.
+            </p>
+
+            {% else %}
+
+            <form method="POST">
+                {% csrf_token %}
+
+                {{ form|crispy }}
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary mt-4">Create account</button>
+                </div>
+            </form>
+            {% endif %}
 
         </div>
       </div>
@@ -120,45 +84,5 @@ img {
 
 <!-- Specific JS goes HERE -->
 {% block javascripts %}
-<script>
-  $('#pic_inp').change(function () {
-
-    var reader = new FileReader();
-    reader.onload = readSuccess;
-    function readSuccess(e) {
-                $('#pic').attr('src', e.target.result);
-    }
-    // read the image file as a data URL.
-    reader.readAsDataURL(this.files[0]);
-});
-
-
-$(document).ready(function() {
-
-
-    var readURL = function(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-
-            reader.onload = function (e) {
-                $('.profile-pic').attr('src', e.target.result);
-            }
-
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-
-
-    $(".file-upload").on('change', function(){
-        readURL(this);
-    });
-
-    $(".upload-button").on('click', function() {
-       $(".file-upload").click();
-    });
-});
-
-
-</script>
-
+<script src="{% static 'js/picture_loader.js' %}" type="text/javascript"></script>
 {% endblock javascripts %}

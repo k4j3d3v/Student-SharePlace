@@ -3,9 +3,15 @@ from string import Template
 from content.models import Degree
 from django import forms
 from django.conf import settings
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm, AuthenticationForm
 from django.utils.safestring import mark_safe
 from users.models import CustomUser
+
+
+def widget_attrs(self, widget):
+    attrs = super(type(self), self).widget_attrs(widget)
+    attrs.update({'class': 'form-control', 'placeholder': 'Your desired username.'})
+    return attrs
 
 
 class PictureWidget(forms.widgets.Widget):
@@ -43,11 +49,27 @@ class PictureWidget(forms.widgets.Widget):
 
 
 class CustomUserCreationForm(UserCreationForm):
+
+    def __init__(self, *args, **kwargs):
+        super(CustomUserCreationForm, self).__init__(*args, **kwargs)
+        for name, field in self.fields.items():
+            if 'class' in field.widget.attrs:
+                field.widget.attrs['class'] += ' form-control'
+            else:
+                field.widget.attrs.update({'class': 'form-control'})
+        print(f"field {self.fields['password1']}")
+        print(f"widget {self.fields['password1'].widget.attrs}")
+        self.fields['password1'].widget.attrs.update({'placeholder': 'Choose a password'})
+        self.fields['password2'].widget.attrs.update({'placeholder': 'Confirm previous password'})
+
     class Meta(UserCreationForm.Meta):
         model = CustomUser
         fields = ("email", "username", "degree", "pic")
         widgets = {
             'pic': PictureWidget,
+            'email': forms.TextInput(attrs={'placeholder': 'University Email'}),
+            'username': forms.TextInput(attrs={'placeholder': 'Username'}),
+
         }
 
     degree = forms.ModelMultipleChoiceField(
@@ -74,9 +96,26 @@ class CustomUserCreationForm(UserCreationForm):
 
 
 class CustomUserChangeForm(UserChangeForm):
+    password = None
+
     class Meta(UserCreationForm.Meta):
         model = CustomUser
-        fields = ("email", "username", "pic")
-        # widgets = {
-        #      'pic': PictureWidget,
-        # }
+        fields = ("email", "username", "pic", "degree")
+        widgets = {
+            'pic': PictureWidget,
+            'degree': forms.CheckboxSelectMultiple,
+        }
+
+
+class UserLoginForm(AuthenticationForm):
+    def __init__(self, *args, **kwargs):
+        super(UserLoginForm, self).__init__(*args, **kwargs)
+
+    username = forms.EmailField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'University Email'}))
+    password = forms.CharField(widget=forms.PasswordInput(
+        attrs={
+            'class': 'form-control',
+            'placeholder': 'Password',
+        }
+    ))
