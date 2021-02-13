@@ -13,9 +13,21 @@ from users.models import CustomUser
 
 def home(request):
     if request.user.is_authenticated:
-        return render(request, "users/index.html")
+        base_url = {
+            'logout': 'Logout',
+            'password_change': 'Change Password',
+            'notes': 'Your Notes',
+            'experiences': 'Your Experiences',
+            'content:course-list': 'Your Courses',
+            'edit_profile': 'Edit your profile!',
+            'content:purchased-list': 'Purchased Notes',
+            'content:note-request': 'Exchange Request',
+            'content:notifications': 'Notifications'
+        }
+        return render(request, "users/dashboard.html", {'urls': base_url})
     else:
-        return render(request, "users/dashboard.html")
+        return render(request, "users/index.html")
+
 
 class UserCreate(SuccessMessageMixin, CreateView):
     form_class = CustomUserCreationForm
@@ -52,7 +64,9 @@ class ProfileUpdate(LoginRequiredMixin, UpdateView):
 class NotesListView(LoginRequiredMixin, ListView):
     model = Note
     # context_object_name = 'resources'
-    template_name = 'users/resource_list.html'
+    template_name = 'tables.html'
+
+    # template_name = 'users/resource_list.html'
 
     def get_queryset(self):
         return Note.objects.filter(owner=self.request.user)
@@ -68,7 +82,9 @@ class NotesListView(LoginRequiredMixin, ListView):
 class ExperiencesListView(LoginRequiredMixin, ListView):
     model = Experience
     # context_object_name = 'resources'
-    template_name = 'users/resource_list.html'
+    template_name = 'tables-exp.html'
+
+    # template_name = 'users/resource_list.html'
 
     def get_queryset(self):
         return Experience.objects.filter(owner=self.request.user)

@@ -16,14 +16,18 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.contrib.auth import views as auth_views
 from django.urls import path, include
-
-admin.autodiscover()
+from users.forms import UserLoginForm
+from users.views import UserCreate
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('users.urls'), name='users'),
     path('', include('content.urls')),
+    path('accounts/register/', UserCreate.as_view(), name='register'),
+    path('accounts/login/', auth_views.LoginView.as_view(authentication_form=UserLoginForm)),
+    path('accounts/', include('django.contrib.auth.urls')),
     path('tinymce/', include('tinymce.urls')),
     path('comments/', include('django_comments_xtd.urls')),
 

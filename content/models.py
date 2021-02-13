@@ -65,7 +65,6 @@ class Experience(Resource):
     course = models.ManyToManyField(Course)  # , related_name="related_to")
     degree = models.ForeignKey(Degree, on_delete=models.CASCADE, null=True, blank=True)
     uploaded = models.FileField(upload_to='resources/', null=True, blank=True)
-    allow_comments = models.BooleanField('allow comments', default=True)
 
 
 class ExchangeRequest(models.Model):

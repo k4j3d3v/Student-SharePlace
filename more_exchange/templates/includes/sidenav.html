@@ -7,7 +7,7 @@
         </button>
         <!-- Brand -->
         <a class="navbar-brand pt-0" href="/">
-            <img src="/static/assets/img/brand/blue.png" class="navbar-brand-img" alt="...">
+            <img src="/media/unimore-logo.png" class="navbar-brand-img" alt="...">
         </a>
         <!-- User -->
         <ul class="nav align-items-center d-md-none">
@@ -29,7 +29,7 @@
                    aria-expanded="false">
                     <div class="media align-items-center">
               <span class="avatar avatar-sm rounded-circle">
-                <img alt="Image placeholder" src="/static/assets/img/theme/team-1-800x800.jpg">
+                <img alt="Image placeholder" src="{{ request.user.pic.url }}">
               </span>
                     </div>
                 </a>
@@ -96,58 +96,55 @@
             <!-- Navigation -->
             <ul class="navbar-nav">
                 <li class="nav-item  class=" active
-                " ">
-                <a class=" nav-link active " href="/"> <i class="ni ni-tv-2 text-primary"></i> Dashboard
+                ">
+                <a class=" nav-link active " href="/">
+                    <i class="ni ni-tv-2 text-primary"></i> Dashboard
                 </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link " href="/icons.html">
-                        <i class="ni ni-planet text-blue"></i> Icons
+                    <a class="nav-link " href="{% url 'users:notes' %}">
+                        <i class="ni ni-books text-blue"></i> Your Notes
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link " href="/maps.html">
-                        <i class="ni ni-pin-3 text-orange"></i> Maps
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link " href="/profile.html">
-                        <i class="ni ni-single-02 text-yellow"></i> User profile
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link " href="/tables.html">
-                        <i class="ni ni-bullet-list-67 text-info"></i> Tables
+                    <a class="nav-link " href="{% url 'users:experiences' %}">
+                        <i class="ni ni-book-bookmark text-orange"></i> Your Experiences
                     </a>
                 </li>
 
+                <li class="nav-item">
+                    <a class="nav-link " href="{% url 'content:purchased-list' %}">
+                        <i class="ni ni-cart text-info"></i> Purchased Notes
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link " href="{% url 'content:note-request' %}">
+                        <i class="fas fa-exchange-alt text-success"></i> Exchange Request
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link " href="{% url 'content:notifications' %}">
+                        <i class="ni ni-notification-70 text-yellow"></i> Notifications
+                    </a>
+                </li>
+
+            </ul>
+            <!-- Divider -->
+            <hr class="my-3">
+            <!-- Heading -->
+            <h6 class="navbar-heading text-muted">Profile</h6>
+            <!-- Navigation -->
+            <ul class="navbar-nav mb-md-3">
+                <li class="nav-item">
+                    <a class="nav-link " href="{% url 'users:profile' %}">
+                        <i class="ni ni-single-02 text-primary"></i> User profile
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'logout' %}">
                         <i class="ni ni-user-run text-red"></i> Logout
                     </a>
                 </li>
-            </ul>
-            <!-- Divider -->
-            <hr class="my-3">
-            <!-- Heading -->
-            <h6 class="navbar-heading text-muted">Links</h6>
-            <!-- Navigation -->
-            <ul class="navbar-nav mb-md-3">
-
-                <li class="nav-item">
-                    <a class="nav-link" target="_blank"
-                       href="https://github.com/creativetimofficial/argon-dashboard-django">
-                        <i class="ni ni-ui-04"></i> Source Code
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" target="_blank"
-                       href="https://www.creative-tim.com/templates/django">
-                        <i class="ni ni-spaceship"></i> More Django Apps
-                    </a>
-                </li>
-
             </ul>
         </div>
     </div>

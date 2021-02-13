@@ -151,8 +151,8 @@ INSTALLED_APPS = [
     'django_comments',
 ]
 
-LOGIN_REDIRECT_URL = "home"
-LOGOUT_REDIRECT_URL = "home"
+LOGIN_REDIRECT_URL = "users:home"
+LOGOUT_REDIRECT_URL = "users:home"
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
