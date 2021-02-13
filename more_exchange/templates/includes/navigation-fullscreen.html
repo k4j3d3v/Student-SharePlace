@@ -2,7 +2,7 @@
 <nav class="navbar navbar-top navbar-horizontal navbar-expand-md navbar-dark">
     <div class="container px-4">
         <a class="navbar-brand" href="/">
-            <img src="/static/assets/img/brand/white.png"/>
+<!--            <img src="/static/assets/img/brand/white.png"/>-->
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapse-main"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -29,24 +29,74 @@
             </div>
             <!-- Navbar items -->
             <ul class="navbar-nav ml-auto">
+                <!--    <a href="{% url 'logout' %}">Logout</a>-->
+                <!--    <a href="{% url 'password_change' %}">Change Password</a>-->
+                <!--    <a href="{% url 'edit_profile' %}">Edit your profile!</a>-->
+
+                {% if user.is_authenticated %}
 
                 <li class="nav-item">
-                    <a target="_blank"
-                       class="nav-link nav-link-icon"
-                       href="https://github.com/creativetimofficial/argon-dashboard-django">
+                    <a
+                            class="nav-link nav-link-icon"
+                            href="{% url 'notes' %}">
                         <i class="ni ni-ui-04"></i>
-                        <span class="nav-link-inner--text">Source Code</span>
+                        <span class="nav-link-inner--text">Your Notes</span>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a target="_blank"
-                       class="nav-link nav-link-icon" href="https://www.creative-tim.com/templates/django">
+                    <a
+                            class="nav-link nav-link-icon" href="{% url 'experiences' %}">
                         <i class="ni ni-spaceship"></i>
-                        <span class="nav-link-inner--text">More Apps</span>
+                        <span class="nav-link-inner--text">Your Experiences</span>
                     </a>
                 </li>
-
+                <li class="nav-item">
+                    <a
+                            class="nav-link nav-link-icon" href="{% url 'content:course-list' %}">
+                        <i class="ni ni-spaceship"></i>
+                        <span class="nav-link-inner--text">Your Courses</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a
+                            class="nav-link nav-link-icon" href="{% url 'content:purchased-list' %}">
+                        <i class="ni ni-spaceship"></i>
+                        <span class="nav-link-inner--text">Purchased Notes</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a
+                            class="nav-link nav-link-icon" href="{% url 'content:note-request' %}">
+                        <i class="ni ni-spaceship"></i>
+                        <span class="nav-link-inner--text">Exchange Request</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a
+                            class="nav-link nav-link-icon" href="{% url 'content:notifications' %}">
+                        <i class="ni ni-spaceship"></i>
+                        <span class="nav-link-inner--text">Notifications</span>
+                    </a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a
+                            class="nav-link nav-link-icon"
+                            href="{% url 'login' %}">
+                        <i class="ni ni-circle-08"></i>
+                        <span class="nav-link-inner--text">Login</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a
+                            class="nav-link nav-link-icon"
+                            href="{% url 'register' %}">
+                        <i class="ni ni-user-run"></i>
+                        <span class="nav-link-inner--text">Join Us!</span>
+                    </a>
+                </li>
+                {% endif %}
             </ul>
         </div>
     </div>

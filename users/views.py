@@ -11,15 +11,17 @@ from users.models import CustomUser
 
 # Create your views here.
 
-def dashboard(request):
-    return render(request, "users/dashboard.html")
-
+def home(request):
+    if request.user.is_authenticated:
+        return render(request, "users/index.html")
+    else:
+        return render(request, "users/dashboard.html")
 
 class UserCreate(SuccessMessageMixin, CreateView):
     form_class = CustomUserCreationForm
     model = CustomUser
     template_name = "users/register.html"
-    success_url = reverse_lazy('dashboard')
+    success_url = reverse_lazy('home')
 
     def form_valid(self, form):
         valid = super(UserCreate, self).form_valid(form)
