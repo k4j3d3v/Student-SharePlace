@@ -44,7 +44,7 @@ class ExperienceDetail(DetailView):
 class ExperienceCreate(LoginRequiredMixin, CreateView):
     form_class = AddExperienceModelForm
     template_name = 'content/note_add.html'
-    success_url = reverse_lazy('experiences')
+    success_url = reverse_lazy('users:experiences')
 
     def get_form_kwargs(self):
         kwargs = super(ExperienceCreate, self).get_form_kwargs()
@@ -61,7 +61,7 @@ class ExperienceCreate(LoginRequiredMixin, CreateView):
 
 class NoteDelete(DeleteView):
     model = Note
-    success_url = reverse_lazy('notes')
+    success_url = reverse_lazy('users:notes')
 
 
 class NoteDetail(DetailView):
@@ -103,7 +103,7 @@ class NoteUpdate(UpdateView):
 class NoteCreate(LoginRequiredMixin, CreateView):
     form_class = AddNoteModelForm
     template_name = 'content/note_add.html'
-    success_url = reverse_lazy('notes')
+    success_url = reverse_lazy('users:notes')
 
     def form_valid(self, form):
         form.instance.owner = self.request.user
@@ -134,7 +134,8 @@ class NoteCreate(LoginRequiredMixin, CreateView):
 class CoursesListView(LoginRequiredMixin, ListView):
     model = Course
     context_object_name = 'courses_list'
-    template_name = 'content/course_list.html'
+    # template_name = 'content/course_list.html'
+    template_name = 'course_tables.html'
 
     def get_queryset(self):
         # TODO: fix missing degree field in admin user
@@ -142,9 +143,13 @@ class CoursesListView(LoginRequiredMixin, ListView):
         user = CustomUser.objects.get(email=self.request.user.email)
         courses_qs = user.get_courses()
         courses = {}
+        print(f"Course QS: {courses_qs}")
         for course in courses_qs:
-            courses[course] = (course.note_set.exclude(owner=user),
-                               course.experience_set.exclude(owner=user))
+            note = course.note_set.exclude(owner=user)
+            exps = course.experience_set.exclude(owner=user)
+            if note.count() > 0 or exps.count() > 0:
+                courses[course] = (note, exps)
+
         return courses
 
     # TODO: https://docs.djangoproject.com/en/3.1/topics/db/examples/

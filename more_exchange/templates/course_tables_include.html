@@ -1,0 +1,50 @@
+<tr>
+    <td colspan="6">
+        <div class="border-0"><h3 class="mb-0">{{ res_type }}</h3></div>
+    </td>
+</tr>
+
+{% if res.count > 0 %}
+
+<thead class="thead-light">
+<tr>
+    <th scope="col">Title</th>
+    <th scope="col">Course</th>
+    <th scope="col">Price</th>
+    <th scope="col">Publication Date</th>
+    <th scope="col">#Purchase</th>
+    <th scope="col">Action</th>
+</tr>
+</thead>
+<tbody>
+{% for r in res %}
+<tr>
+    <th scope="row"> {{ r }}</th>
+    <td> {{ r.course }}</td>
+    <td> {{ r.price }}</td>
+    <td> {{ r.publ_date }}</td>
+    <td> {{ r.title }}</td>
+    <td>
+        <a href="{% url 'content:{{res_type}}-detail' pk=note.pk %}"
+           class="btn btn-sm btn-icon btn-3 btn-info">
+            <span class="btn-inner--icon"><i class="ni ni-bag-17"></i></span>
+            <span class="btn-inner--text"> Detail </span>
+        </a>
+        <a href="{% url 'content:{{res_type}}-update' pk=note.pk %}"
+           class="btn btn-sm btn-icon btn-3 btn-warning">
+            <span class="btn-inner--icon"><i class="fas fa-edit"></i></span>
+            <span class="btn-inner--text"> Update! </span>
+        </a>
+        <a href="{% url 'content:{{res_type}}-delete' pk=note.pk %}"
+           class="btn btn-sm btn-icon btn-3 btn-danger">
+            <span class="btn-inner--icon"><i class="fas fa-trash"></i></span>
+            <span class="btn-inner--text"> Delete </span>
+        </a>
+</tr>
+{% endfor %}
+{% else %}
+<tr>
+    <td colspan="6"> No available {{ res_type|pluralize }}</td>
+</tr>
+{% endif %}
+</tbody>

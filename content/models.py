@@ -60,7 +60,6 @@ class Note(Resource):
 
 class Experience(Resource):
     kind_of = models.CharField(max_length=50)
-    # text = models.CharField(max_length=1000)
     text = tinymce_models.HTMLField()
     course = models.ManyToManyField(Course)  # , related_name="related_to")
     degree = models.ForeignKey(Degree, on_delete=models.CASCADE, null=True, blank=True)

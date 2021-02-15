@@ -33,7 +33,7 @@ class UserCreate(SuccessMessageMixin, CreateView):
     form_class = CustomUserCreationForm
     model = CustomUser
     template_name = "users/register.html"
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('users:home')
 
     def form_valid(self, form):
         valid = super(UserCreate, self).form_valid(form)
