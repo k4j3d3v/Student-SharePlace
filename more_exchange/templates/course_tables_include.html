@@ -1,8 +1,10 @@
+<thead>
 <tr>
     <td colspan="6">
         <div class="border-0"><h3 class="mb-0">{{ res_type }}</h3></div>
     </td>
 </tr>
+</thead>
 
 {% if res.count > 0 %}
 
@@ -25,21 +27,28 @@
     <td> {{ r.publ_date }}</td>
     <td> {{ r.title }}</td>
     <td>
-        <a href="{% url 'content:{{res_type}}-detail' pk=note.pk %}"
+        {% with url_name='content:'|add:res_type|add:'-detail' %}
+        <a href="{% url url_name pk=r.pk %}"
            class="btn btn-sm btn-icon btn-3 btn-info">
             <span class="btn-inner--icon"><i class="ni ni-bag-17"></i></span>
             <span class="btn-inner--text"> Detail </span>
         </a>
-        <a href="{% url 'content:{{res_type}}-update' pk=note.pk %}"
+        {% endwith %}
+
+        {% with url_name='content:'|add:res_type|add:'-update' %}
+        <a href="{% url url_name pk=r.pk %}"
            class="btn btn-sm btn-icon btn-3 btn-warning">
             <span class="btn-inner--icon"><i class="fas fa-edit"></i></span>
             <span class="btn-inner--text"> Update! </span>
         </a>
-        <a href="{% url 'content:{{res_type}}-delete' pk=note.pk %}"
+        {% endwith %}
+        {% with url_name='content:'|add:res_type|add:'-delete' %}
+        <a href="{% url url_name pk=r.pk %}"
            class="btn btn-sm btn-icon btn-3 btn-danger">
             <span class="btn-inner--icon"><i class="fas fa-trash"></i></span>
             <span class="btn-inner--text"> Delete </span>
         </a>
+        {% endwith %}
 </tr>
 {% endfor %}
 {% else %}
