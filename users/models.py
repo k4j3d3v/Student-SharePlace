@@ -38,3 +38,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def get_full_name(self):
         return self.username
+
+    def is_owner(self, resource):
+        return resource.owner == self
+
+    def has_purchased_note(self, note):
+        return self.purchased_notes.filter(id=note.id).count() > 0

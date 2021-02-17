@@ -29,7 +29,6 @@ urlpatterns = [
     path('accounts/login/', auth_views.LoginView.as_view(authentication_form=UserLoginForm)),
     path('accounts/', include('django.contrib.auth.urls')),
     path('tinymce/', include('tinymce.urls')),
-    path('comments/', include('django_comments_xtd.urls')),
 
 ]
 

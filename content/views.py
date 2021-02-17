@@ -5,40 +5,40 @@ from content.models import Note, Experience, Course, ExchangeRequest, Notificati
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse, HttpResponseNotFound
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy
 from django.views.decorators.http import require_POST
 from django.views.generic import DetailView, CreateView, ListView
 from django.views.generic.edit import UpdateView, DeleteView
 from users.models import CustomUser
 
 
-class ExperienceUpdate(UpdateView):
+class ChangePermissionMixin(object):
+
+    def get_object(self, queryset=None):
+        obj = super(ChangePermissionMixin, self).get_object(queryset)
+        if not self.request.user.is_owner(obj):
+            raise PermissionDenied
+        return obj
+
+
+class ExperienceUpdate(LoginRequiredMixin, ChangePermissionMixin, UpdateView):
     model = Experience
     form_class = AddExperienceModelForm
     template_name = 'content/note_update_form.html'
-    # success_url = '/books/'
 
 
-class ExperienceDelete(DeleteView):
+class ExperienceDelete(LoginRequiredMixin, ChangePermissionMixin, DeleteView):
     model = Experience
     success_url = reverse_lazy('experiences')
     template_name = 'content/note_confirm_delete.html'
 
 
-#
-# class ExperienceDetail(DetailView):
-#     model = Experience
-
 class ExperienceDetail(DetailView):
     model = Experience
     date_field = "publish"
     month_format = "%m"
-
-    def get_context_data(self, **kwargs):
-        context = super(ExperienceDetail, self).get_context_data(**kwargs)
-        context.update({'next': reverse('comments-xtd-sent')})
-        return context
 
 
 class ExperienceCreate(LoginRequiredMixin, CreateView):
@@ -59,7 +59,7 @@ class ExperienceCreate(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class NoteDelete(DeleteView):
+class NoteDelete(LoginRequiredMixin, ChangePermissionMixin, DeleteView):
     model = Note
     success_url = reverse_lazy('users:notes')
 
@@ -74,6 +74,13 @@ class NoteDetail(DetailView):
         context['purchased'] = True if user.purchased_notes.filter(id=id) else False
         return context
 
+    def get_object(self, queryset=None):
+        obj = super(NoteDetail, self).get_object(queryset)
+        print(obj)
+        if not (self.request.user.is_owner(obj) or self.request.user.has_purchased_note(obj)):
+            raise PermissionDenied
+        return obj
+
 
 # How to make a common superclass for NoteUpdate and NoteCreate views
 # to accomplish DRY principle
@@ -87,7 +94,7 @@ class NoteDetail(DetailView):
 #         return kwargs
 
 
-class NoteUpdate(UpdateView):
+class NoteUpdate(LoginRequiredMixin, ChangePermissionMixin, UpdateView):
     model = Note
     form_class = AddNoteModelForm
     template_name_suffix = '_update_form'
@@ -97,6 +104,7 @@ class NoteUpdate(UpdateView):
     def get_form_kwargs(self):
         kwargs = super(NoteUpdate, self).get_form_kwargs()
         kwargs['user'] = self.request.user
+        print(self.request.user)
         return kwargs
 
 
@@ -113,22 +121,6 @@ class NoteCreate(LoginRequiredMixin, CreateView):
         kwargs = super(NoteCreate, self).get_form_kwargs()
         kwargs['user'] = self.request.user
         return kwargs
-
-    # if request.method == 'POST':
-    #     # create a form instance and populate it with data from the request:
-    #     form = AddNoteModelForm(request.POST)
-    #     # check whether it's valid:
-    #     if form.is_valid():
-    #         # process the data in form.cleaned_data as required
-    #         # ...
-    #         # redirect to a new URL:
-    #         return HttpResponse('/thanks/')
-    #
-    # # if a GET (or any other method) we'll create a blank form
-    # else:
-    #     form = AddNoteModelForm()
-    #
-    # return render(request, 'content/note_add.html', {'form': form})
 
 
 class CoursesListView(LoginRequiredMixin, ListView):

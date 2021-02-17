@@ -57,11 +57,19 @@ class Note(Resource):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     uploaded = models.FileField(upload_to='resources/')
 
+    def __repr__(self):
+        return f'{self.__class__}: {self.__str__()}'
+    #
+    # class Meta:
+    #     rules_permissions = {
+    #         "read": rules.has_purchased_note,
+    #     }
+
 
 class Experience(Resource):
     kind_of = models.CharField(max_length=50)
     text = tinymce_models.HTMLField()
-    course = models.ManyToManyField(Course)  # , related_name="related_to")
+    course = models.ManyToManyField(Course, blank=True)
     degree = models.ForeignKey(Degree, on_delete=models.CASCADE, null=True, blank=True)
     uploaded = models.FileField(upload_to='resources/', null=True, blank=True)
 

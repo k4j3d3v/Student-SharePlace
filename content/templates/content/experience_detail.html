@@ -15,5 +15,4 @@
 {% if object.uploaded %}
 <p><strong>File:</strong><a href="{{ object.uploaded.url }}">{{ object.get_filename }}</a></p>
 {% endif %}
-{% include 'comments/comments.html' with pk=object.pk %}
 {% endblock %}

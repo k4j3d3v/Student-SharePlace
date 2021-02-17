@@ -100,13 +100,14 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTH_USER_MODEL = 'users.CustomUser'
 
+AUTHENTICATION_BACKENDS = (
+    'rules.permissions.ObjectPermissionBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-
-# for comment system
-SITE_ID = 1
 
 TIME_ZONE = 'Europe/Rome'
 
@@ -138,7 +139,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.sites',
+    # 'django.contrib.sites',
     'django_extensions',
     'django.contrib.humanize',
 
@@ -147,8 +148,6 @@ INSTALLED_APPS = [
     'users',
     'content',
 
-    'django_comments_xtd',
-    'django_comments',
 ]
 
 LOGIN_REDIRECT_URL = "users:home"
