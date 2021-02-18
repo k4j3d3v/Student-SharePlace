@@ -1,5 +1,6 @@
 {% load humanize %}
 
+{% if not no_h %}
 <thead>
 <tr>
     <td colspan="6">
@@ -7,6 +8,7 @@
     </td>
 </tr>
 </thead>
+{% endif %}
 
 {% if res.count > 0 %}
 
