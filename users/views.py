@@ -2,7 +2,7 @@ from content.models import Note, Experience
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, UpdateView, CreateView
 from users.forms import CustomUserCreationForm, CustomUserChangeForm
@@ -24,7 +24,7 @@ def home(request):
             'content:note-request': 'Exchange Request',
             'content:notifications': 'Notifications'
         }
-        return render(request, "users/dashboard.html", {'urls': base_url})
+        return redirect('/courses')
     else:
         return render(request, "users/index.html")
 
@@ -64,9 +64,9 @@ class ProfileUpdate(LoginRequiredMixin, UpdateView):
 class NotesListView(LoginRequiredMixin, ListView):
     model = Note
     # context_object_name = 'resources'
-    template_name = 'tables.html'
+    # template_name = 'tables.html'
 
-    # template_name = 'users/resource_list.html'
+    template_name = 'notes-list.html'
 
     def get_queryset(self):
         return Note.objects.filter(owner=self.request.user)
@@ -82,7 +82,7 @@ class NotesListView(LoginRequiredMixin, ListView):
 class ExperiencesListView(LoginRequiredMixin, ListView):
     model = Experience
     # context_object_name = 'resources'
-    template_name = 'tables-exp.html'
+    template_name = 'exps-list.html'
 
     # template_name = 'users/resource_list.html'
 

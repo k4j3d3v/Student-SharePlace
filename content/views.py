@@ -31,7 +31,7 @@ class ExperienceUpdate(LoginRequiredMixin, ChangePermissionMixin, UpdateView):
 
 class ExperienceDelete(LoginRequiredMixin, ChangePermissionMixin, DeleteView):
     model = Experience
-    success_url = reverse_lazy('experiences')
+    success_url = reverse_lazy('users:experiences')
     template_name = 'content/note_confirm_delete.html'
 
 
@@ -179,7 +179,7 @@ def buy_note(request):
 class ExchangeNote(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     form_class = ExchangeRequestModelForm
     template_name = "content/note_exchange_form.html"
-    success_url = reverse_lazy('dashboard')
+    success_url = reverse_lazy('users:home')
     success_message = "Exchange will be notified %s." \
                       "He will decide if accept your exchange proposal."
 

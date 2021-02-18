@@ -14,12 +14,17 @@
 
 <thead class="thead-light">
 <tr>
-    {%if res_type == 'note' %}
+    <!--    If u want header, u're viewing other resources then -->
+    {%if not no_h or res_type == 'note' %}
     <th scope="col">Title</th>
     <th scope="col">Course</th>
     <th scope="col">Price</th>
     <th scope="col">Publication Date</th>
+    {% if not no_h %}
+    <th scope="col">Author</th>
+    {% else %}
     <th scope="col">#Purchase</th>
+    {% endif %}
     <th scope="col">Action</th>
     {% else %}
     <th scope="col">Title</th>
@@ -28,6 +33,7 @@
     <th scope="col">Publication Date</th>
     <th scope="col" colspan="2" class="text-center">Action</th>
     {% endif %}
+
 </tr>
 </thead>
 <tbody>
@@ -42,7 +48,11 @@
     <td> {{ r.uploaded|yesno:"yes,no,no" }}</td>
     {% endif %}
     <td> {{ r.publ_date|naturaltime }}</td>
+    {% if not no_h %}
+    <td> {{ r.owner }}</td>
+    {% else %}
     <td> {{ r.customuser_set.count }}</td>
+    {% endif %}
 
     <td>
         {% with url_name='content:'|add:res_type|add:'-detail' %}
