@@ -1,7 +1,9 @@
+{% load humanize %}
+
 <thead>
 <tr>
     <td colspan="6">
-        <div class="border-0"><h3 class="mb-0">{{ res_type }}</h3></div>
+        <div class="border-0"><h3 class="mb-0">{{ res_type|capfirst}}{{res.count|pluralize}}</h3></div>
     </td>
 </tr>
 </thead>
@@ -10,22 +12,36 @@
 
 <thead class="thead-light">
 <tr>
+    {%if res_type == 'note' %}
     <th scope="col">Title</th>
     <th scope="col">Course</th>
     <th scope="col">Price</th>
     <th scope="col">Publication Date</th>
     <th scope="col">#Purchase</th>
     <th scope="col">Action</th>
+    {% else %}
+    <th scope="col">Title</th>
+    <th scope="col">Course/Degree</th>
+    <th scope="col">Attachment</th>
+    <th scope="col">Publication Date</th>
+    <th scope="col" colspan="2" class="text-center">Action</th>
+    {% endif %}
 </tr>
 </thead>
 <tbody>
 {% for r in res %}
 <tr>
     <th scope="row"> {{ r }}</th>
+    {% if res_type == 'note' %}
     <td> {{ r.course }}</td>
     <td> {{ r.price }}</td>
-    <td> {{ r.publ_date }}</td>
-    <td> {{ r.title }}</td>
+    {% else %}
+    <td> {{ r.course.get|default:r.degree }}</td>
+    <td> {{ r.uploaded|yesno:"yes,no,no" }}</td>
+    {% endif %}
+    <td> {{ r.publ_date|naturaltime }}</td>
+    <td> {{ r.customuser_set.count }}</td>
+
     <td>
         {% with url_name='content:'|add:res_type|add:'-detail' %}
         <a href="{% url url_name pk=r.pk %}"

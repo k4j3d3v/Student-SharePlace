@@ -116,7 +116,6 @@
                             <th scope="col">Course/Degree</th>
                             <th scope="col">Attachment</th>
                             <th scope="col">Publication Date</th>
-                            <!--                            <th scope="col">#Purchase</th>-->
                             <th scope="col">Action</th>
                         </tr>
                         </thead>
@@ -124,10 +123,9 @@
                         {% for res in object_list %}
                         <tr>
                             <th scope="row"> {{ res }}</th>
-                            <td> {{ res.course.get|default:res.degree }}</td>
+                            <td> {{ res.course |default:res.degree }}</td>
                             <td> {{ res.uploaded|yesno:"yes,no,no" }}</td>
                             <td> {{ res.publ_date }}</td>
-                            <!--                            <td> {{ res.title }}</td>-->
                             <td>
                                 <a href="{% url 'content:note-detail' pk=res.pk %}"
                                    class="btn btn-sm btn-icon btn-3 btn-info">
