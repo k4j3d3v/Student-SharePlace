@@ -57,6 +57,11 @@ class Note(Resource):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     uploaded = models.FileField(upload_to='resources/')
 
+    def extension(self):
+        name, extension = os.path.splitext(self.uploaded.name)
+        print(f"Name: {name} Extension {extension}")
+        return extension[1:]
+
     def __repr__(self):
         return f'{self.__class__}: {self.__str__()}'
     #

@@ -72,14 +72,14 @@ class NoteDetail(DetailView):
         id = self.kwargs['pk']
         user = CustomUser.objects.get(email=self.request.user.email)
         context['purchased'] = True if user.purchased_notes.filter(id=id) else False
+        context['owner'] = True if user.resource_set.filter(id=id) else False
         return context
-
-    def get_object(self, queryset=None):
-        obj = super(NoteDetail, self).get_object(queryset)
-        print(obj)
-        if not (self.request.user.is_owner(obj) or self.request.user.has_purchased_note(obj)):
-            raise PermissionDenied
-        return obj
+    #
+    # def get_object(self, queryset=None):
+    #     obj = super(NoteDetail, self).get_object(queryset)
+    #     if not (self.request.user.is_owner(obj) or self.request.user.has_purchased_note(obj)):
+    #         raise PermissionDenied
+    #     return obj
 
 
 # How to make a common superclass for NoteUpdate and NoteCreate views
@@ -179,15 +179,14 @@ def buy_note(request):
 class ExchangeNote(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     form_class = ExchangeRequestModelForm
     template_name = "content/note_exchange_form.html"
-    success_url = reverse_lazy('users:home')
-    success_message = "Exchange will be notified %s." \
+    success_url = reverse_lazy('content:note-request')
+    success_message = "Exchange will be notified to %s." \
                       "He will decide if accept your exchange proposal."
 
     def form_valid(self, form):
         # response = super(type(self), self).form_valid(form)
         # do something with self.object
         self.object = form.save()
-
         print("object %s" % self.object)
         return super(type(self), self).form_valid(form)
 
@@ -271,7 +270,7 @@ def delete_notification(request):
     not_id = request.POST.get('id', None)
     n = Notification.objects.filter(id=not_id).get()
     if n:
-        n.request.delete()
+        # n.request.delete()
         n.delete()
         return HttpResponse(json.dumps({"id": not_id}), content_type='application/json')
     return HttpResponseNotFound('<h1>Page not found</h1>')

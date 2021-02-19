@@ -55,6 +55,15 @@
     {% endif %}
 
     <td>
+        {%if not no_h or res_type == 'experience' %}
+        {% with url_name='content:'|add:res_type|add:'-detail' %}
+        <a href="{% url url_name pk=r.pk %}"
+           class="btn btn-icon btn-3 btn-primary">
+            <span class="btn-inner--icon"><i class="ni ni-bag-17"></i></span>
+            <span class="btn-inner--text"> Detail </span>
+        </a>
+        {% endwith %}
+        {% else %}
         {% with url_name='content:'|add:res_type|add:'-detail' %}
         <a href="{% url url_name pk=r.pk %}"
            class="btn btn-sm btn-icon btn-3 btn-info">
@@ -77,6 +86,7 @@
             <span class="btn-inner--text"> Delete </span>
         </a>
         {% endwith %}
+        {% endif %}
 </tr>
 {% endfor %}
 {% else %}

@@ -1,4 +1,5 @@
 from content.models import Note, Experience, ExchangeRequest
+from django.core.exceptions import ValidationError
 from django.forms import ModelForm
 
 
@@ -29,15 +30,28 @@ class AddExperienceModelForm(ModelForm):
         model = Experience
         exclude = ['owner', 'publ_date']
 
+
 class ExchangeRequestModelForm(ModelForm):
 
     def __init__(self, user=None, pk=None, **kwargs):
         super(type(self), self).__init__(**kwargs)
         if user and pk:
             self.fields['proposed_note'].queryset = Note.objects.filter(owner=user)
-            self.fields['requested_note'].queryset = Note.objects.exclude(owner=user)
+            had_notes = user.purchased_notes.all().values_list('id')
+            self.fields['requested_note'].queryset = Note.objects.exclude(owner=user).exclude(id__in=had_notes)
             self.fields['requested_note'].initial = Note.objects.get(pk=pk)
             self.user = user
+
+    def clean(self):
+        cleaned_data = super().clean()
+        proposed = cleaned_data.get("proposed_note")
+        requested = cleaned_data.get("requested_note")
+        # check if receiver user has already proposed note
+        receiver = requested.owner
+        if receiver.purchased_notes.filter(id=proposed.id).count() > 0:
+            raise ValidationError(
+                f"{receiver} has already obtained your {proposed} notes."
+                "This exchange request is not possible!")
 
     def save(self, commit=True):
         # Get the unsaved Pizza instance

@@ -3,7 +3,7 @@ body {
 }
 
 .profile-pic {
-    max-width: 200px;
+   /* max-width: 400px;*/
     max-height: 200px;
     display: block;
 }

@@ -1,4 +1,5 @@
 {% extends 'layouts/base.html' %}
+{% load humanize %}
 
 {% block headinfo %}
 <title> Note detail </title>
@@ -11,21 +12,139 @@
           $('.container').append('<p><strong>File:</strong><a href="{{ note.uploaded.url }}">{{ note.get_filename }}</a></p>');
       }
 
+
 </script>
 {% endblock %}
 
 {% block content %}
-<p><strong>Title:</strong> {{ note.title }}</p>
-<p><strong>Publication Date:</strong> {{ note.publ_date }}</p>
-<p><strong>Price:</strong> {{ note.price }}</p>
-<p><strong>Course:</strong> {{ note.course }}</p>
 
-<button id="purchase" class="btn btn-primary">Purchase it!</button>
-<a id="exchange" class="btn btn-primary" href="{% url 'content:note-exchange' pk=note.pk %}">Exchange it!</a>
+<!-- Header -->
+<div class="header bg-gradient-info pb-8 pt-5 pt-md-8">
+  <div class="container-fluid">
+    <div class="header-body">
+      <!-- Card stats -->
+      <div class="row justify-content-evenly">
+        <div class="col-sm-8">
+          <div class="card card-stats mb-4 mb-xl-0">
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <h2 class="card-title text-uppercase mb-0">{{ note.title }}</h2>
+                  <span class="h4 font-weight-bold text-muted mb-0">Details</span>
+                </div>
+                <div class="col-auto">
+                  <div class="icon icon-shape bg-success text-white rounded-circle shadow">
+                    <i class="fas fa-book-open"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid mt--7">
+
+
+  <div class="row">
+    <div class="col">
+      <div class="card shadow">
+        <div class="card-header bg-white">
+          <div class="row align-items-center">
+            <div class="col-8">
+              <h3 class="mb-0">{{ note.title }}</h3>
+            </div>
+            <div class="col-4 text-right">
+              Published {{ note.publ_date|naturaltime}}
+            </div>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <div class="row">
+            <div class="col-lg-12 col-md-12">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="font-weight-bold card-title">
+                    <i class="fas fa-euro-sign"></i>
+                    Price</h4>
+                  <p class="card-text"> {{ note.price }} €</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12 col-md-12">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="font-weight-bold card-title">
+                    <i class="fas fa-book"></i>
+                    Course </h4>
+                  <p class="card-text"> {{ note.course }} </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12 col-md-12">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="font-weight-bold card-title">
+                    <i class="fas fa-user-graduate"></i>
+                    Author </h4>
+                  <p class="card-text"> {{ note.owner.username }} </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12 col-md-12">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="font-weight-bold card-title">
+                    <i class="fas fa-file-alt"></i>
+                    Notes file type </h4>
+                  <p class="card-text text-uppercase"> {{ note.extension }} </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12 col-md-12">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="font-weight-bold card-title">
+                    <i class="fas fa-hand-point-up"></i>
+                    Action</h4>
+                  {% if owner or purchased %}
+                  <a class="btn btn-outline-primary" href="{{ note.uploaded.url }}">Download</a>
+                  {% else %}
+                  <button id="purchase" class="btn btn-primary">Purchase it!</button>
+                  <a id="exchange" class="btn btn-primary" href="{% url 'content:note-exchange' pk=note.pk %}">Exchange
+                    it!</a>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% include "includes/footer.html" %}
+
+</div>
+
 
 {% if purchased %}
 <script>
    disableButton();
+
 
 </script>
 {% endif %}
