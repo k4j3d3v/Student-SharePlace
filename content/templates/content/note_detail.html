@@ -4,16 +4,6 @@
 {% block headinfo %}
 <title> Note detail </title>
 
-<script>
-      function disableButton()
-      {
-          $('#purchase').addClass('disabled');
-          $('#purchase').html('Purchased');
-          $('.container').append('<p><strong>File:</strong><a href="{{ note.uploaded.url }}">{{ note.get_filename }}</a></p>');
-      }
-
-
-</script>
 {% endblock %}
 
 {% block content %}
@@ -116,7 +106,7 @@
           <div class="row">
             <div class="col-lg-12 col-md-12">
               <div class="card">
-                <div class="card-body">
+                <div class="card-body" id="action">
                   <h4 class="font-weight-bold card-title">
                     <i class="fas fa-hand-point-up"></i>
                     Action</h4>
@@ -139,19 +129,20 @@
   {% include "includes/footer.html" %}
 
 </div>
+{% endblock %}
 
-
-{% if purchased %}
-<script>
-   disableButton();
-
-
-</script>
-{% endif %}
-
+{% block javascripts %}
 
 <script>
-    $('#purchase').click(function()
+      function disableButton()
+      {
+          $('#purchase').addClass('disabled');
+          $('#purchase').html('Purchased');
+          $('#exchange').addClass('disabled');
+          $('#action').append('<a class="btn btn-outline-primary" href="{{ note.uploaded.url }}">Download</a>');
+      }
+
+     $('#purchase').click(function()
         {
             console.log("ciao merda");
             $.ajax({
@@ -165,14 +156,11 @@
                 },
                 error: function(rs, e)
                 {
-                    //document.getElementById('message').style.color="red";
-                    //document.getElementById('message').innerText="Errore durante l'acquisto";
+                    document.getElementById('message').style.color="red";
+                    document.getElementById('message').innerText="Errore durante l'acquisto";
                 }
             });
         })
 
-
-    })
 </script>
-
-{% endblock %}
+{% endblock javascripts %}
