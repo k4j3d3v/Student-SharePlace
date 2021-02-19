@@ -12,7 +12,12 @@ class AddNoteModelForm(ModelForm):
     def __init__(self, user=None, **kwargs):
         super(AddNoteModelForm, self).__init__(**kwargs)
         if user:
-            self.fields['course'].queryset = user.get_courses()  # .degree.course_set.all()
+            self.fields['course'] = forms.ModelChoiceField(queryset=user.get_courses(), widget=forms.RadioSelect)
+        for name, field in self.fields.items():
+            if 'class' in field.widget.attrs:
+                field.widget.attrs['class'] += ' form-control'
+            else:
+                field.widget.attrs.update({'class': 'form-control'})
 
 
 class AddExperienceModelForm(ModelForm):
@@ -20,23 +25,29 @@ class AddExperienceModelForm(ModelForm):
     def __init__(self, user=None, **kwargs):
         super(type(self), self).__init__(**kwargs)
         # TODO: manage degree or course choice for experience
-        # self.fields['degree'].widget = forms.TextInput()
         if user:
-            # self.fields['course'].queryset = user.get_courses()
-            # self.fields['course'].widget = forms.CheckboxSelectMultiple
-            # self.fields['degree'].queryset = user.degree
-            # self.fields['degree'].widget = forms.CheckboxSelectMultiple
             self.fields['course'] = forms.ModelMultipleChoiceField(
                 queryset=user.get_courses(),
                 widget=forms.CheckboxSelectMultiple
             )
-            self.fields['degree'] = forms.ModelMultipleChoiceField(
-                queryset=user.degree,
-                widget=forms.CheckboxSelectMultiple
-            )
+            self.fields['degree'] = forms.ModelChoiceField(queryset=user.degree, widget=forms.RadioSelect)
+        for name, field in self.fields.items():
+            if 'class' in field.widget.attrs:
+                field.widget.attrs['class'] += ' form-control'
+            else:
+                field.widget.attrs.update({'class': 'form-control'})
 
-            # self.fields['text'].widget = TinyMCE()
-            # # (attrs={'cols': 80, 'rows': 30}
+    def clean(self):
+        cleaned_data = super().clean()
+        courses = cleaned_data.get("course")
+        degrees = cleaned_data.get("degree")
+        print(degrees)
+        print("I'm not arriving there")
+        print()
+        if courses and degrees:
+            raise ValidationError(
+                "You can't add an experience relatives to Course and Degree."
+                "If it's connected to a Course, is implicitly also connected to Degree from which course belongs to.")
 
     class Meta:
         model = Experience

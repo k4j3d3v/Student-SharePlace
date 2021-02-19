@@ -44,7 +44,7 @@ class ExperienceDetail(DetailView):
 class ExperienceCreate(LoginRequiredMixin, CreateView):
     form_class = AddExperienceModelForm
     # template_name = 'content/note_add.html'
-    template_name = 'content/res_form.html'
+    template_name = 'content/experience_add_form.html'
     success_url = reverse_lazy('users:experiences')
 
     def get_form_kwargs(self):
@@ -53,8 +53,11 @@ class ExperienceCreate(LoginRequiredMixin, CreateView):
         return kwargs
 
     def form_valid(self, form):
+        print()
+        print("I'm not arriving there")
+        print()
         form.instance.owner = self.request.user
-        # print(form.instance.degree)
+        print(form.instance.degree)
         # for d in self.request.user.degree:
         #     form.instance.degree.add(d)
         return super().form_valid(form)
@@ -109,7 +112,7 @@ class NoteUpdate(LoginRequiredMixin, ChangePermissionMixin, UpdateView):
 
 class NoteCreate(LoginRequiredMixin, CreateView):
     form_class = AddNoteModelForm
-    template_name = 'content/note_add.html'
+    template_name = 'content/note_add_form.html'
     success_url = reverse_lazy('users:notes')
 
     def form_valid(self, form):

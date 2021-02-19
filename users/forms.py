@@ -57,8 +57,6 @@ class CustomUserCreationForm(UserCreationForm):
                 field.widget.attrs['class'] += ' form-control'
             else:
                 field.widget.attrs.update({'class': 'form-control'})
-        print(f"field {self.fields['password1']}")
-        print(f"widget {self.fields['password1'].widget.attrs}")
         self.fields['password1'].widget.attrs.update({'placeholder': 'Choose a password'})
         self.fields['password2'].widget.attrs.update({'placeholder': 'Confirm previous password'})
 

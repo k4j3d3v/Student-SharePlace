@@ -1,0 +1,86 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block stylesheets %}
+{{ form.media }}
+{% endblock stylesheets %}
+
+{% block title %} Profile {% endblock title %}
+
+{% block content %}
+<div class="header bg-gradient-info pb-8 pt-5 pt-md-8">
+  <div class="container-fluid">
+    <div class="header-body">
+      <!-- Card stats -->
+      <div class="row justify-content-evenly">
+        <div class="col-sm-8">
+          <div class="card card-stats mb-4 mb-xl-0">
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <h2 class="card-title text-uppercase mb-0"> Load notes about your degree courses</h2>
+                  <span class="h4 font-weight-bold text-muted mb-0">Sell or exchange them</span>
+                </div>
+                <div class="col-auto">
+                  <div class="icon icon-shape bg-success text-white rounded-circle shadow">
+                    <i class="ni ni-books"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{% include "content/add_form_include.html" with res="Note"%}
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE -->
+{% block javascripts %}
+<script>
+
+var checkcounter = 0;
+$("input[name='course']").change( function(){
+  if($(this).is(':checked'))
+  {
+    checkcounter++;
+    $("input[name='degree']").each(function () {
+      $(this).attr('disabled', true);
+     });
+
+  }
+  else
+  {
+      checkcounter--;
+      if (checkcounter == 0)
+      {
+        $("input[name='degree']").each(function () {
+          $(this).attr('disabled', false);
+        });
+      }
+   }
+});
+
+$("input[name='degree']").each(function () {
+    $(this).click(function(e){
+        $("input[name='course']").each(function () {
+          $(this).attr('disabled', true);
+        });
+      if (e.ctrlKey) {
+          $(this).prop('checked', false);
+          $("input[name='course']").each(function () {
+            $(this).attr('disabled', false);
+          });
+      }
+    });
+});
+
+
+</script>
+
+{% endblock javascripts %}

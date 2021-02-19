@@ -1,6 +1,5 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
-{% load crispy_forms_tags %}
 
 {% block stylesheets %}
 {{ form.media }}
@@ -37,30 +36,7 @@
   </div>
 </div>
 
-<div class="container-fluid mt--7">
-
-  <div class="row">
-    <div class="col-xl-10 order-xl-1">
-      <div class="card bg-secondary shadow">
-        <div class="card-header bg-white border-0">
-          <div class="row align-items-center">
-            <div class="col-8">
-              <h3 class="mb-0">Experience...</h3>
-            </div>
-          </div>
-        </div>
-        <div class="card-body">
-          <form method="post">{% csrf_token %}
-            {{ form|crispy }}
-            <div>
-              <button type="submit" class="btn btn-primary mt-4">Add</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+{% include "content/add_form_include.html" with res="Experience"%}
 
 {% endblock content %}
 
@@ -90,28 +66,19 @@ $("input[name='course']").change( function(){
    }
 });
 
-var checkcounter = 0;
-$("input[name='degree']").change( function(){
-  if($(this).is(':checked'))
-  {
-    checkcounter++;
-    $("input[name='course']").each(function () {
-      $(this).attr('disabled', true);
-     });
-
-  }
-  else
-  {
-      checkcounter--;
-      if (checkcounter == 0)
-      {
+$("input[name='degree']").each(function () {
+    $(this).click(function(e){
         $("input[name='course']").each(function () {
-          $(this).attr('disabled', false);
+          $(this).attr('disabled', true);
         });
+      if (e.ctrlKey) {
+          $(this).prop('checked', false);
+          $("input[name='course']").each(function () {
+            $(this).attr('disabled', false);
+          });
       }
-   }
+    });
 });
-
 
 </script>
 
