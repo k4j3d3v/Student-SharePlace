@@ -1,4 +1,5 @@
 from content.models import Note, Experience, ExchangeRequest
+from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm
 
@@ -21,8 +22,19 @@ class AddExperienceModelForm(ModelForm):
         # TODO: manage degree or course choice for experience
         # self.fields['degree'].widget = forms.TextInput()
         if user:
-            self.fields['course'].queryset = user.get_courses()
-            self.fields['degree'].queryset = user.degree
+            # self.fields['course'].queryset = user.get_courses()
+            # self.fields['course'].widget = forms.CheckboxSelectMultiple
+            # self.fields['degree'].queryset = user.degree
+            # self.fields['degree'].widget = forms.CheckboxSelectMultiple
+            self.fields['course'] = forms.ModelMultipleChoiceField(
+                queryset=user.get_courses(),
+                widget=forms.CheckboxSelectMultiple
+            )
+            self.fields['degree'] = forms.ModelMultipleChoiceField(
+                queryset=user.degree,
+                widget=forms.CheckboxSelectMultiple
+            )
+
             # self.fields['text'].widget = TinyMCE()
             # # (attrs={'cols': 80, 'rows': 30}
 

@@ -43,7 +43,8 @@ class ExperienceDetail(DetailView):
 
 class ExperienceCreate(LoginRequiredMixin, CreateView):
     form_class = AddExperienceModelForm
-    template_name = 'content/note_add.html'
+    # template_name = 'content/note_add.html'
+    template_name = 'content/res_form.html'
     success_url = reverse_lazy('users:experiences')
 
     def get_form_kwargs(self):
@@ -98,8 +99,6 @@ class NoteUpdate(LoginRequiredMixin, ChangePermissionMixin, UpdateView):
     model = Note
     form_class = AddNoteModelForm
     template_name_suffix = '_update_form'
-
-    # success_url = '/books/'
 
     def get_form_kwargs(self):
         kwargs = super(NoteUpdate, self).get_form_kwargs()
