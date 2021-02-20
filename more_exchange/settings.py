@@ -25,9 +25,6 @@ MESSAGE_TAGS = {
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 
-INTERNAL_IPS = [
-    '127.0.0.1'
-]
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
@@ -156,15 +153,3 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 MEDIA_URL = '/media/'
-
-# # for comment system
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-#
-# COMMENT_APP = 'django_comments_xtd'
-# COMMENTS_XTD_CONFIRM_EMAIL = True
-# COMMENTS_XTD_SALT = b"es-war-einmal-una-bella-princesa-in-a-beautiful-castle"
-# COMMENTS_XTD_FROM_EMAIL = 'noreply@example.com'
-# COMMENTS_XTD_CONTACT_EMAIL = 'helpdesk@example.com'
-# COMMENTS_XTD_MAX_THREAD_LEVEL = 0  # Default value
-# COMMENTS_XTD_THREADED_EMAILS = False
-# COMMENTS_XTD_SEND_HTML_EMAIL = True
