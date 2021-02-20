@@ -62,14 +62,6 @@ class Note(Resource):
         print(f"Name: {name} Extension {extension}")
         return extension[1:]
 
-    def __repr__(self):
-        return f'{self.__class__}: {self.__str__()}'
-    #
-    # class Meta:
-    #     rules_permissions = {
-    #         "read": rules.has_purchased_note,
-    #     }
-
 
 class Experience(Resource):
     kind_of = models.CharField(max_length=50)

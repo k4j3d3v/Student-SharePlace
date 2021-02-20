@@ -1,23 +1,72 @@
-{% extends 'base.html' %}
+{% extends 'layouts/base.html' %}
 {% load humanize %}
 
 {% block content %}
-<h2>Exchange request</h2>
+<div class="header bg-gradient-info pb-8 pt-5 pt-md-8">
+    <div class="container-fluid">
+        <div class="header-body">
+            <!-- Card stats -->
+            <div class="row justify-content-evenly">
+                <div class="col-sm-8">
+                    <div class="card card-stats mb-4 mb-xl-0">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h2 class="card-title text-uppercase mb-0"> Here you can see notification about your
+                                        Exchange Requests.</h2>
+                                    <span class="h4 font-weight-bold text-muted mb-0">If requested Note Owner has accepted or not.</span>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-yellow text-white rounded-circle shadow">
+                                        <i class="ni ni-notification-70"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-<ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid mt--7">
+
     {% for n in notifs %}
-    <li id="{{ n.id }}">
-        <p>{{ n }}</p>
-        <p>{{ n.date|naturaltime }}</p>
-        <p>
-            <button onclick="deleteNotif({{ n.id }})" class="btn btn-primary">Viewed</button>
-        </p>
-    </li>
+    <div class="row align-items-center" id="{{ n.id }}">
+        <div class="col-6">
+            <div class="card shadow">
+                <div class="card-header bg-white">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h3 class="mb-0 text-primary"> Notification from {{ n.request.user_receiver }}</h3>
+                        </div>
+                        <div class="col-4 text-right">
+                            {{ n.date|naturaltime }}
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <!--    <h5 class="card-title">Special title treatment</h5>-->
+                    <p class="card-text">{{n}}</p>
+                    <button onclick="deleteNotif({{ n.id }})" class="btn btn-outline-primary">Viewed</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--    <li id="{{ n.id }}">-->
+    <!--        <p>{{ n }}</p>-->
+    <!--        <p>{{ n.date|naturaltime }}</p>-->
+    <!--        <p>-->
+    <!--            <button onclick="deleteNotif({{ n.id }})" class="btn btn-primary">Viewed</button>-->
+    <!--        </p>-->
+    <!--    </li>-->
     {% empty %}
     <li>You have no unread notification.</li>
     {% endfor %}
-</ul>
 
+</div>
 <script type="text/javascript">
     function deleteNotif(id) {
         console.log(id);
@@ -39,11 +88,7 @@
         });
     }
 
-
 </script>
 {% endblock %}
-
-
-
 
 

@@ -9,7 +9,11 @@
         <div class="card-header bg-white border-0">
           <div class="row align-items-center">
             <div class="col-8">
-              <h3 class="mb-0">{{res}}...</h3>
+              <h3 class="mb-0">
+                {%if res == "Request" %}
+                Make an Exchange
+                {% endif %}
+                {{res}}...</h3>
             </div>
           </div>
         </div>
@@ -17,7 +21,12 @@
           <form method="post">{% csrf_token %}
             {{ form|crispy }}
             <div>
+              {%if res == "Request" %}
+              <button type="submit" class="btn btn-primary mt-4">Propose Exchange!</button>
+              {% else %}
               <button type="submit" class="btn btn-primary mt-4">Add</button>
+              {% endif %}
+
             </div>
           </form>
         </div>

@@ -272,7 +272,6 @@ def delete_notification(request):
     not_id = request.POST.get('id', None)
     n = Notification.objects.filter(id=not_id).get()
     if n:
-        # n.request.delete()
         n.delete()
         return HttpResponse(json.dumps({"id": not_id}), content_type='application/json')
     return HttpResponseNotFound('<h1>Page not found</h1>')

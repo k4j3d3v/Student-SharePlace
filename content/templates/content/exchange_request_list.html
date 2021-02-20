@@ -1,31 +1,101 @@
-{% extends 'base.html' %}
+{% extends 'layouts/base.html' %}
 {% load humanize %}
 
 {% block content %}
-<h2>Exchange request</h2>
+<div class="header bg-gradient-info pb-8 pt-5 pt-md-8">
+    <div class="container-fluid">
+        <div class="header-body">
+            <!-- Card stats -->
+            <div class="row justify-content-evenly">
+                <div class="col-sm-8">
+                    <div class="card card-stats mb-4 mb-xl-0">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h2 class="card-title text-uppercase mb-0"> Here you can see other student proposed
+                                        Exchange Requests.</h2>
+                                    <span class="h4 font-weight-bold text-muted mb-0">You can accepted it or not.</span>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-success text-white rounded-circle shadow">
+                                        <i class="fas fa-exchange-alt"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-<ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid mt--7">
     {% for req in reqs %}
-    <li id="{{req.id}}">
-        <p>{{ req.user_requester }} wants exchange his {{ req.proposed_note }} with your {{ req.requested_note }}</p>
-        <p>
-        <form method='POST' id="accept-form" action="{% url 'content:request-action' %}">
-            {% csrf_token %}
-            <input type="hidden" value="{{req.id}}" name="req"/>
-            <input class="btn btn-success" type='submit' value='Accept' id='accept'/>
-        </form>
-        <form method='POST' id="reject-form" action="{% url 'content:request-action' %}">
-            {% csrf_token %}
-            <input type="hidden" value="{{req.id}}" name="req"/>
-            <input class="btn btn-danger" type='submit' value='Reject' id='reject'/>
-        </form>
-        </p>
-        <p>{{ req.date|naturaltime }}</p>
-    </li>
+    <div class="row align-items-center" id="{{req.id}}">
+        <div class="col-xl-6">
+            <div class="card shadow">
+                <div class="card-header bg-white">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h3 class="mb-0 text-primary"> Notification from {{ req.user_requester }}</h3>
+                        </div>
+                        <div class="col-4 text-right">
+                            {{ req.date|naturaltime }}
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <!--    <h5 class="card-title">Special title treatment</h5>-->
+                    <p class="card-text"><strong>{{ req.user_requester.username }}</strong>
+                        wants exchange his {{ req.proposed_note }} with your {{ req.requested_note }}</p>
+                    <div class="row align-items-center">
+                        <div class="col-2 text-center">
+                            <form method='POST' id="accept-form" action="{% url 'content:request-action' %}">
+                                {% csrf_token %}
+                                <input type="hidden" value="{{req.id}}" name="req"/>
+                                <input class="btn btn-outline-success" type='submit' value='Accept' id='accept'/>
+                            </form>
+                        </div>
+                        <div class="col-2 text-center">
+                            <form method='POST' id="reject-form" action="{% url 'content:request-action' %}">
+                                {% csrf_token %}
+                                <input type="hidden" value="{{req.id}}" name="req"/>
+                                <input class="btn btn-outline-danger" type='submit' value='Reject' id='reject'/>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     {% empty %}
-    <li>You have no unread notification.</li>
+    <p>You have no requests.</p>
     {% endfor %}
-</ul>
+
+
+    <!--<ul>-->
+    <!--    {% for req in reqs %}-->
+    <!--    <li id="{{req.id}}">-->
+    <!--        <p>{{ req.user_requester }} wants exchange his {{ req.proposed_note }} with your {{ req.requested_note }}</p>-->
+    <!--        <p>-->
+    <!--        <form method='POST' id="accept-form" action="{% url 'content:request-action' %}">-->
+    <!--            {% csrf_token %}-->
+    <!--            <input type="hidden" value="{{req.id}}" name="req"/>-->
+    <!--            <input class="btn btn-success" type='submit' value='Accept' id='accept'/>-->
+    <!--        </form>-->
+    <!--        <form method='POST' id="reject-form" action="{% url 'content:request-action' %}">-->
+    <!--            {% csrf_token %}-->
+    <!--            <input type="hidden" value="{{req.id}}" name="req"/>-->
+    <!--            <input class="btn btn-danger" type='submit' value='Reject' id='reject'/>-->
+    <!--        </form>-->
+    <!--        </p>-->
+    <!--        <p>{{ req.date|naturaltime }}</p>-->
+    <!--    </li>-->
+    <!--    {% empty %}-->
+    <!--    <li>You have no unread notification.</li>-->
+    <!--    {% endfor %}-->
+    <!--</ul>-->
 
 <script type="text/javascript">
     var frm = $('#accept-form');
