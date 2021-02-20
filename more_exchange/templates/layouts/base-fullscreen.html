@@ -24,11 +24,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <title>
-        Argon Dashboard Django - {% block title %} Open-Source Admin Panel {% endblock %} | Creative-Tim
+        MoreExchange - {% block title %} Home {% endblock %}
     </title>
 
-    <!-- Favicon - loaded as static -->
-    <link href="{% static 'assets/img/brand/favicon.png' %}" rel="icon" type="image/png">
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
@@ -55,15 +53,14 @@
             <div class="header-body text-center mb-7">
                 <div class="row justify-content-center">
                     <div class="col-lg-5 col-md-6">
-                        <h1 class="text-white">
-                            <a target="_blank" class="text-white"
-                               href="https://www.creative-tim.com/product/argon-dashboard-django">Argon Dashboard
-                                Django</a>
+                        <div style="background-color:white" class="shadow rounded">
+                            <img src="/media/unimore-logo.png">
+                        </div>
+                        <h1 class="text-default">
+                            More Exchange
                         </h1>
                         <p class="text-lead text-light">
-                            UI-Ready open-source admin panel enhanced with database and authentication -
-                            Coded by <a target="_blank" class="text-white" href="https://www.creative-tim.com/">Creative-Tim</a>
-                            and <a target="_blank" class="text-white" href="https://appseed.us">AppSeed</a>.
+                            Portal for share UNIMORE notes and experiences
                         </p>
                     </div>
                 </div>
@@ -79,9 +76,10 @@
 
     {% block content %}{% endblock content %}
 
-    {% include "includes/footer-fullscreen.html" %}
 
 </div>
+
+{% include "includes/footer-fullscreen.html" %}
 
 {% include "includes/scripts-fullscreen.html" %}
 
