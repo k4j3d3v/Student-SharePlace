@@ -70,34 +70,19 @@
         </div>
     </div>
     {% empty %}
-    <p>You have no requests.</p>
+    <div class="row align-items-center">
+        <div class="col-6">
+            <div class="card shadow">
+                <div class="card-header">
+                    <h1>You have no requests.</h1>
+                </div>
+            </div>
+        </div>
+    </div>
     {% endfor %}
 
 
-    <!--<ul>-->
-    <!--    {% for req in reqs %}-->
-    <!--    <li id="{{req.id}}">-->
-    <!--        <p>{{ req.user_requester }} wants exchange his {{ req.proposed_note }} with your {{ req.requested_note }}</p>-->
-    <!--        <p>-->
-    <!--        <form method='POST' id="accept-form" action="{% url 'content:request-action' %}">-->
-    <!--            {% csrf_token %}-->
-    <!--            <input type="hidden" value="{{req.id}}" name="req"/>-->
-    <!--            <input class="btn btn-success" type='submit' value='Accept' id='accept'/>-->
-    <!--        </form>-->
-    <!--        <form method='POST' id="reject-form" action="{% url 'content:request-action' %}">-->
-    <!--            {% csrf_token %}-->
-    <!--            <input type="hidden" value="{{req.id}}" name="req"/>-->
-    <!--            <input class="btn btn-danger" type='submit' value='Reject' id='reject'/>-->
-    <!--        </form>-->
-    <!--        </p>-->
-    <!--        <p>{{ req.date|naturaltime }}</p>-->
-    <!--    </li>-->
-    <!--    {% empty %}-->
-    <!--    <li>You have no unread notification.</li>-->
-    <!--    {% endfor %}-->
-    <!--</ul>-->
-
-<script type="text/javascript">
+    <script type="text/javascript">
     var frm = $('#accept-form');
     frm.submit(function () {
         console.log("dioporco");
