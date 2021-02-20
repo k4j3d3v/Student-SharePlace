@@ -66,7 +66,7 @@ class Note(Resource):
 class Experience(Resource):
     kind_of = models.CharField(max_length=50)
     text = tinymce_models.HTMLField()
-    course = models.ManyToManyField(Course, blank=True)
+    course = models.ManyToManyField(Course, blank=True, null=True)
     degree = models.ForeignKey(Degree, on_delete=models.CASCADE, null=True, blank=True)
     uploaded = models.FileField(upload_to='resources/', null=True, blank=True)
 
