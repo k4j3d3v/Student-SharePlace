@@ -18,20 +18,19 @@
           </div>
         </div>
         <div class="card-body">
-          <form method="post"
-                {% if res==
-          "Note" or res == "Experience" %}
-          enctype="multipart/form-data"
-          {% endif %}
-          >
-          {% csrf_token %}
-          {{ form|crispy }}
-          <div>
-            {%if res == "Request" %}
-            <button type="submit" class="btn btn-primary mt-4">Propose Exchange!</button>
+          {% if res == "Note" or res == "Experience" %}
+          <form method="post" enctype="multipart/form-data">
             {% else %}
-            <button type="submit" class="btn btn-primary mt-4">Add</button>
-            {% endif %}
+            <form method="post">
+              {% endif %}
+              {% csrf_token %}
+              {{ form|crispy }}
+              <div>
+                {%if res == "Request" %}
+                <button type="submit" class="btn btn-primary mt-4">Propose Exchange!</button>
+                {% else %}
+                <button type="submit" class="btn btn-primary mt-4">Add</button>
+                {% endif %}
 
           </div>
           </form>
