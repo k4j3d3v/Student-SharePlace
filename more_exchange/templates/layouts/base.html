@@ -56,9 +56,29 @@
 </div>
 
 {% include "includes/scripts.html" %}
+<script type="text/javascript">
+   $(document).ready(function () {
+        $('a.nav-link').each(function () {
+            $(this).parent().removeClass('active');
+            $(this).removeClass('active');
+        });
+        var url = window.location.pathname;
+        console.log(url);
+        if (url =='/courses')
+        {
+            url='/';
+        }
+        $('a.nav-link[href="'+ url +'"]').parent().addClass('active');
+        $('a.nav-link[href="'+ url +'"]').addClass('active');
+
+    });
+
+
+</script>
 
 <!-- Specific JS goes HERE -->
-{% block javascripts %}{% endblock javascripts %}
+{% block javascripts %}
+{% endblock javascripts %}
 
 </body>
 
