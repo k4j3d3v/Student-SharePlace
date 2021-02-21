@@ -34,11 +34,11 @@ class AddExperienceModelForm(ModelForm):
             self.fields['degree'] = forms.ModelChoiceField(queryset=user.degree,
                                                            widget=forms.RadioSelect,
                                                            required=False)
-        # for name, field in self.fields.items():
-        #     if 'class' in field.widget.attrs:
-        #         field.widget.attrs['class'] += ' form-control'
-        #     else:
-        #         field.widget.attrs.update({'class': 'form-control'})
+        for name, field in self.fields.items():
+            if 'class' in field.widget.attrs:
+                field.widget.attrs['class'] += ' form-control'
+            else:
+                field.widget.attrs.update({'class': 'form-control'})
 
     def clean(self):
         cleaned_data = super().clean()

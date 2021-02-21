@@ -26,7 +26,12 @@ class ChangePermissionMixin(object):
 class ExperienceUpdate(LoginRequiredMixin, ChangePermissionMixin, UpdateView):
     model = Experience
     form_class = AddExperienceModelForm
-    template_name = 'content/note_update_form.html'
+    template_name = 'content/experience_update_form.html'
+
+    def get_form_kwargs(self):
+        kwargs = super(ExperienceUpdate, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
 
 class ExperienceDelete(LoginRequiredMixin, ChangePermissionMixin, DeleteView):
@@ -84,18 +89,6 @@ class NoteDetail(DetailView):
     #     if not (self.request.user.is_owner(obj) or self.request.user.has_purchased_note(obj)):
     #         raise PermissionDenied
     #     return obj
-
-
-# How to make a common superclass for NoteUpdate and NoteCreate views
-# to accomplish DRY principle
-# class NoteManipulate(View):
-#     form_class = AddNoteModelForm
-#     model = Note
-#
-#     def get_form_kwargs(self):
-#         kwargs = super(NoteCreate, self).get_form_kwargs()
-#         kwargs['user'] = self.request.user
-#         return kwargs
 
 
 class NoteUpdate(LoginRequiredMixin, ChangePermissionMixin, UpdateView):
@@ -181,7 +174,7 @@ def buy_note(request):
 class ExchangeNote(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     form_class = ExchangeRequestModelForm
     template_name = "content/note_exchange_form.html"
-    success_url = reverse_lazy('content:note-request')
+    success_url = reverse_lazy('content:notifications')
     success_message = "Exchange will be notified to %s." \
                       "He will decide if accept your exchange proposal."
 
@@ -273,5 +266,8 @@ def delete_notification(request):
     n = Notification.objects.filter(id=not_id).get()
     if n:
         n.delete()
+        if not n.request.accepted:
+            n.request.delete()
+
         return HttpResponse(json.dumps({"id": not_id}), content_type='application/json')
     return HttpResponseNotFound('<h1>Page not found</h1>')

@@ -10,3 +10,23 @@
 
 <!--   Argon JS   -->
 <script src="/static/assets/js/argon-dashboard.min.js?v=1.1.0"></script>
+
+<script type="text/javascript">
+    $(function () {
+        $('#sidenav-collapse-main > ul > li').removeClass('active')
+        $('#sidenav-collapse-main > ul > li > a').removeClass('active')
+
+        var path = location.pathname;
+        var arrai = path.split('/');
+
+        var dotClass = arrai.pop();
+        if (dotClass == "") {
+            dotClass = arrai.pop();
+        }
+        var filter = '.' + dotClass;
+
+        $(filter).parent().addClass('active');
+        $(filter).addClass('active');
+    });
+
+</script>

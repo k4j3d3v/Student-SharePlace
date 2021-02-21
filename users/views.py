@@ -60,6 +60,13 @@ class ProfileUpdate(LoginRequiredMixin, UpdateView):
     def get_object(self):
         return self.request.user
 
+    # def form_valid(self, form):
+    #     profile = form.save(commit=False)
+    #     pic = form.cleaned_data['pic']
+    #     print(self.object)
+    #     # obj.user = self.request.user
+    #     profile.save()
+
 
 class NotesListView(LoginRequiredMixin, ListView):
     model = Note

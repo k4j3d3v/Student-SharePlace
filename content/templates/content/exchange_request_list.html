@@ -104,6 +104,7 @@
 
     var rej_frm = $('#reject-form');
     rej_frm.submit(function () {
+        console.log("heyyyyy");
         $.ajax({
             type: rej_frm.attr('method'),
             url: rej_frm.attr('action'),

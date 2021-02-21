@@ -13,6 +13,7 @@
                 {%if res == "Request" %}
                 Make an Exchange
                 {% endif %}
+                {{action}}
                 {{res}}...</h3>
             </div>
           </div>
@@ -29,7 +30,7 @@
                 {%if res == "Request" %}
                 <button type="submit" class="btn btn-primary mt-4">Propose Exchange!</button>
                 {% else %}
-                <button type="submit" class="btn btn-primary mt-4">Add</button>
+                <button type="submit" class="btn btn-primary mt-4">{{ action|default:"Add"}}!</button>
                 {% endif %}
 
           </div>

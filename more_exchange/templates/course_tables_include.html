@@ -55,7 +55,7 @@
     {% endif %}
 
     <td>
-        {%if not no_h or res_type == 'experience' %}
+        {%if not no_h%}
         {% with url_name='content:'|add:res_type|add:'-detail' %}
         <a href="{% url url_name pk=r.pk %}"
            class="btn btn-icon btn-3 btn-primary">
