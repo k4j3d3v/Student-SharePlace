@@ -20,7 +20,6 @@ class CustomUserCreationForm(UserCreationForm):
         model = CustomUser
         fields = ("email", "username", "degree", "pic")
         widgets = {
-            # 'pic': PictureWidget,
             'email': forms.TextInput(attrs={'placeholder': 'University Email'}),
             'username': forms.TextInput(attrs={'placeholder': 'Username'}),
 
@@ -56,7 +55,6 @@ class CustomUserChangeForm(UserChangeForm):
         model = CustomUser
         fields = ("email", "username", "pic", "degree")
         widgets = {
-            # 'pic': ImageWidget,
             'degree': forms.CheckboxSelectMultiple,
         }
 

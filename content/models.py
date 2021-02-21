@@ -59,14 +59,13 @@ class Note(Resource):
 
     def extension(self):
         name, extension = os.path.splitext(self.uploaded.name)
-        print(f"Name: {name} Extension {extension}")
         return extension[1:]
 
 
 class Experience(Resource):
     kind_of = models.CharField(max_length=50)
     text = tinymce_models.HTMLField()
-    course = models.ManyToManyField(Course, blank=True, null=True)
+    course = models.ManyToManyField(Course, blank=True)
     degree = models.ForeignKey(Degree, on_delete=models.CASCADE, null=True, blank=True)
     uploaded = models.FileField(upload_to='resources/', null=True, blank=True)
 

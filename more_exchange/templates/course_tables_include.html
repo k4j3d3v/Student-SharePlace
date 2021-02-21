@@ -44,7 +44,7 @@
     <td> {{ r.course }}</td>
     <td> {{ r.price }}</td>
     {% else %}
-    <td> {{ r.course.get|default:r.degree }}</td>
+    <td> {{ r.course.all|join:", "|default:r.degree }}</td>
     <td> {{ r.uploaded|yesno:"yes,no,no" }}</td>
     {% endif %}
     <td> {{ r.publ_date|naturaltime }}</td>

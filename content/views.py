@@ -48,7 +48,6 @@ class ExperienceDetail(DetailView):
 
 class ExperienceCreate(LoginRequiredMixin, CreateView):
     form_class = AddExperienceModelForm
-    # template_name = 'content/note_add.html'
     template_name = 'content/experience_add_form.html'
     success_url = reverse_lazy('users:experiences')
 
@@ -58,13 +57,7 @@ class ExperienceCreate(LoginRequiredMixin, CreateView):
         return kwargs
 
     def form_valid(self, form):
-        print()
-        print("I'm not arriving there")
-        print()
         form.instance.owner = self.request.user
-        print(form.instance.degree)
-        # for d in self.request.user.degree:
-        #     form.instance.degree.add(d)
         return super().form_valid(form)
 
 
@@ -83,12 +76,6 @@ class NoteDetail(DetailView):
         context['purchased'] = True if user.purchased_notes.filter(id=id) else False
         context['owner'] = True if user.resource_set.filter(id=id) else False
         return context
-    #
-    # def get_object(self, queryset=None):
-    #     obj = super(NoteDetail, self).get_object(queryset)
-    #     if not (self.request.user.is_owner(obj) or self.request.user.has_purchased_note(obj)):
-    #         raise PermissionDenied
-    #     return obj
 
 
 class NoteUpdate(LoginRequiredMixin, ChangePermissionMixin, UpdateView):
@@ -99,7 +86,6 @@ class NoteUpdate(LoginRequiredMixin, ChangePermissionMixin, UpdateView):
     def get_form_kwargs(self):
         kwargs = super(NoteUpdate, self).get_form_kwargs()
         kwargs['user'] = self.request.user
-        print(self.request.user)
         return kwargs
 
 
@@ -125,11 +111,9 @@ class CoursesListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         # TODO: fix missing degree field in admin user
-        print("email: %s \n" % self.request.user.email)
         user = CustomUser.objects.get(email=self.request.user.email)
         courses_qs = user.get_courses()
         courses = {}
-        print(f"Course QS: {courses_qs}")
         for course in courses_qs:
             note = course.note_set.exclude(owner=user)
             exps = course.experience_set.exclude(owner=user)
@@ -138,8 +122,6 @@ class CoursesListView(LoginRequiredMixin, ListView):
 
         return courses
 
-    # TODO: https://docs.djangoproject.com/en/3.1/topics/db/examples/
-    # start from here
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = CustomUser.objects.get(email=self.request.user.email)
@@ -165,8 +147,6 @@ def buy_note(request):
     id = request.POST.get('id', None)
     to_buy = Note.objects.filter(id=id).get()
     user.purchased_notes.add(to_buy)
-    print(user.purchased_notes.all())
-    # ctx = {'valid': valid, 'message': message}
     return HttpResponse(json.dumps({}), content_type='application/json')
 
 
@@ -178,10 +158,7 @@ class ExchangeNote(LoginRequiredMixin, SuccessMessageMixin, CreateView):
                       "He will decide if accept your exchange proposal."
 
     def form_valid(self, form):
-        # response = super(type(self), self).form_valid(form)
-        # do something with self.object
         self.object = form.save()
-        print("object %s" % self.object)
         return super(type(self), self).form_valid(form)
 
     def get_form_kwargs(self):
@@ -200,13 +177,10 @@ class ExchangeRequestList(LoginRequiredMixin, ListView):
     template_name = 'content/exchange_request_list.html'
 
     def get_queryset(self):
-        # TODO: fix missing degree field in admin user
         user = CustomUser.objects.get(email=self.request.user.email)
         req = ExchangeRequest.objects.filter(user_receiver=user).filter(seen=False)
         return req.order_by('-date')
 
-    # TODO: https://docs.djangoproject.com/en/3.1/topics/db/examples/
-    # start from here
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = CustomUser.objects.get(email=self.request.user.email)
@@ -221,7 +195,6 @@ class NotificationList(LoginRequiredMixin, ListView):
     template_name = 'content/notifications_list.html'
 
     def get_queryset(self):
-        # TODO: fix missing degree field in admin user
         user = CustomUser.objects.get(email=self.request.user.email)
         return Notification.objects.filter(user_receiver=user).order_by('-date')
 
@@ -233,8 +206,6 @@ def buy_note(request):
     id = request.POST.get('id', None)
     to_buy = Note.objects.filter(id=id).get()
     user.purchased_notes.add(to_buy)
-    print(user.purchased_notes.all())
-    # ctx = {'valid': valid, 'message': message}
     return HttpResponse(json.dumps({}), content_type='application/json')
 
 

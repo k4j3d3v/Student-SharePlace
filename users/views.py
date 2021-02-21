@@ -9,21 +9,8 @@ from users.forms import CustomUserCreationForm, CustomUserChangeForm
 from users.models import CustomUser
 
 
-# Create your views here.
-
 def home(request):
     if request.user.is_authenticated:
-        base_url = {
-            'logout': 'Logout',
-            'password_change': 'Change Password',
-            'notes': 'Your Notes',
-            'experiences': 'Your Experiences',
-            'content:course-list': 'Your Courses',
-            'edit_profile': 'Edit your profile!',
-            'content:purchased-list': 'Purchased Notes',
-            'content:note-request': 'Exchange Request',
-            'content:notifications': 'Notifications'
-        }
         return redirect('/courses')
     else:
         return render(request, "users/index.html")
@@ -41,15 +28,6 @@ class UserCreate(SuccessMessageMixin, CreateView):
         login(self.request, user)
         return valid
 
-    # def form_valid(self, form):
-    #     form.instance.owner = self.request.user
-    #     return super().form_valid(form)
-    #
-    # def get_form_kwargs(self):
-    #     kwargs = super(NoteCreate, self).get_form_kwargs()
-    #     kwargs['user'] = self.request.user
-    #     return kwargs
-
 
 class ProfileUpdate(LoginRequiredMixin, UpdateView):
     model = CustomUser
@@ -60,19 +38,9 @@ class ProfileUpdate(LoginRequiredMixin, UpdateView):
     def get_object(self):
         return self.request.user
 
-    # def form_valid(self, form):
-    #     profile = form.save(commit=False)
-    #     pic = form.cleaned_data['pic']
-    #     print(self.object)
-    #     # obj.user = self.request.user
-    #     profile.save()
-
 
 class NotesListView(LoginRequiredMixin, ListView):
     model = Note
-    # context_object_name = 'resources'
-    # template_name = 'tables.html'
-
     template_name = 'notes-list.html'
 
     def get_queryset(self):
@@ -88,10 +56,7 @@ class NotesListView(LoginRequiredMixin, ListView):
 
 class ExperiencesListView(LoginRequiredMixin, ListView):
     model = Experience
-    # context_object_name = 'resources'
     template_name = 'exps-list.html'
-
-    # template_name = 'users/resource_list.html'
 
     def get_queryset(self):
         return Experience.objects.filter(owner=self.request.user)

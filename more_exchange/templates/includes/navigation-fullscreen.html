@@ -29,10 +29,18 @@
             </div>
             <!-- Navbar items -->
             <ul class="navbar-nav ml-auto">
+                {% if user.is_authenticated %}
                 <li class="nav-item">
-                    <a
-                            class="nav-link nav-link-icon"
-                            href="{% url 'login' %}">
+                    <a class="nav-link nav-link-icon"
+                       href="{% url 'users:home' %}">
+                        <i class="ni ni-tv-2 "></i>
+                        <span class="nav-link-inner--text">Dashboard</span>
+                    </a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link nav-link-icon"
+                       href="{% url 'login' %}">
                         <i class="ni ni-circle-08"></i>
                         <span class="nav-link-inner--text">Login</span>
                     </a>
@@ -44,6 +52,7 @@
                         <span class="nav-link-inner--text">Join Us!</span>
                     </a>
                 </li>
+                {% endif %}
             </ul>
         </div>
     </div>
