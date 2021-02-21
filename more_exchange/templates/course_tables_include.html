@@ -38,7 +38,7 @@
 </thead>
 <tbody>
 {% for r in res %}
-<tr>
+<tr id="{{r.id}}">
     <th scope="row"> {{ r }}</th>
     {% if res_type == 'note' %}
     <td> {{ r.course }}</td>
@@ -80,8 +80,8 @@
         </a>
         {% endwith %}
         {% with url_name='content:'|add:res_type|add:'-delete' %}
-        <a href="{% url url_name pk=r.pk %}"
-           class="btn btn-sm btn-icon btn-3 btn-danger">
+        {% url url_name pk=r.pk as pass_url %}
+        <a class="btn btn-sm btn-icon btn-3 btn-danger text-white delete" onclick="deleteItem('{{pass_url}}',{{r.id}})">
             <span class="btn-inner--icon"><i class="fas fa-trash"></i></span>
             <span class="btn-inner--text"> Delete </span>
         </a>

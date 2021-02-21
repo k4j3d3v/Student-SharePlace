@@ -121,7 +121,6 @@ class NoteCreate(LoginRequiredMixin, CreateView):
 class CoursesListView(LoginRequiredMixin, ListView):
     model = Course
     context_object_name = 'courses_list'
-    # template_name = 'content/course_list.html'
     template_name = 'course_tables.html'
 
     def get_queryset(self):

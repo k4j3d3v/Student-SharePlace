@@ -65,4 +65,39 @@
 {% endblock content %}
 
 <!-- Specific JS goes HERE -->
-{% block javascripts %}{% endblock javascripts %}
+{% block javascripts %}
+<script type="text/javascript">
+       function deleteItem(url,id) {
+       console.log(url);
+
+        if (confirm("Are you sure?")) {
+            console.log("confirmed");
+            $.ajax({
+                url: url ,
+                data: {
+                    'csrfmiddlewaretoken': "{{ csrf_token }}"
+                },
+                type: "POST",
+                datatype: "json",
+                success: function (data) {
+
+                    $("#"+id).fadeOut(600, function() { $(this).remove(); });
+                },
+                error: function(data) {
+
+                    alert("error"+data);
+                    console.log("error"+data);
+                }
+            });
+
+            }
+            else
+            {
+                console.log("not");
+                return false;
+            }
+        }
+
+</script>
+
+{% endblock javascripts %}
