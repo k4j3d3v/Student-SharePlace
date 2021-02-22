@@ -13,7 +13,7 @@ Now you can create a virtualenv:
 ```bash
 virtualenv <your_env_name>
 ```
-After that you need ```active``` it:
+After that you need ```activate``` it:
 ```bash
 source <your_env_name>/bin/activate
 ```
@@ -25,6 +25,13 @@ Now, you can use ```pip``` for installing packages needed for use this project:
 
 If everything is gone in the right way, you'll be able to use the project in debug mode:
 ```bash
+(<your_env_name>) python manage.py runserver
+```
+Ok, maybe now you're seeing some mess in your terminal.
+Make and Apply migrations, so you'll be able to run it:
+```bash
+(<your_env_name>) python manage.py makemigrations
+(<your_env_name>) python manage.py migrate
 (<your_env_name>) python manage.py runserver
 ```
 ### Note
