@@ -13,7 +13,7 @@ Now you can create a virtualenv:
 ```bash
 virtualenv <your_env_name>
 ```
-After that you need ```activate``` it:
+After that you need to ```activate``` it:
 ```bash
 source <your_env_name>/bin/activate
 ```
@@ -35,6 +35,6 @@ Make and Apply migrations, so you'll be able to run it:
 (<your_env_name>) python manage.py runserver
 ```
 ### Note
-For use it without having errors during registration you need to create some object instances, this is due for respecting referential integrity relationship (```ForeignKey```, ```ManytoMany```, etc...).
+For using it without any error during registration you need to create some object instances, this is due for respecting referential integrity relationship (```ForeignKey```, ```ManytoMany```, etc...).
 You can add it from admin panel, accessing from your browser: ```http://127.0.0.1:8000/admin```.
 In registration form you must specify your ```Degree```, so you first need to create an instance of that.
