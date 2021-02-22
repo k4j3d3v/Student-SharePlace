@@ -38,3 +38,9 @@ Make and Apply migrations, so you'll be able to run it:
 For using it without any error during registration you need to create some object instances, this is due for respecting referential integrity relationship (```ForeignKey```, ```ManytoMany```, etc...).
 You can add it from admin panel, accessing from your browser: ```http://127.0.0.1:8000/admin```.
 In registration form you must specify your ```Degree```, so you first need to create an instance of that.
+***
+In ```data_branch``` are available a sqlite DB, you can checkout it and pull down also a bit populated DB.
+Otherwise it's also there ```fixture.json```, you can use it for add data (after migrations):
+```bash
+(<your_env_name>) python manage.py loaddata fixture.json
+```
